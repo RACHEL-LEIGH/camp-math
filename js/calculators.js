@@ -1,5 +1,5 @@
 /*!
- * Camp Math — calculators.js
+ * CampingMath — calculators.js
  * Shared math, unit-conversion, formatting, and DOM helpers used by every
  * calculator's page-specific script (js/calc-*.js). Keeping these in one
  * place means every calculator rounds, converts, and validates the same way.
@@ -7,7 +7,7 @@
 (function () {
   "use strict";
 
-  var CampMath = window.CampMath || {};
+  var CampingMath = window.CampingMath || {};
   var calc = {};
 
   /* ---------- Basic math helpers ---------- */
@@ -158,7 +158,7 @@
   /* ---------- Copy result to clipboard ---------- */
   calc.copyResult = function (text) {
     function done(success) {
-      CampMath.showToast(success ? "Result copied to clipboard" : "Couldn't copy — select and copy manually");
+      CampingMath.showToast(success ? "Result copied to clipboard" : "Couldn't copy — select and copy manually");
     }
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
@@ -201,6 +201,6 @@
     return active ? active.getAttribute("data-value") : null;
   };
 
-  CampMath.calc = calc;
-  window.CampMath = CampMath;
+  CampingMath.calc = calc;
+  window.CampingMath = CampingMath;
 })();

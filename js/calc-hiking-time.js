@@ -1,5 +1,5 @@
 /*!
- * Camp Math — calc-hiking-time.js
+ * CampingMath — calc-hiking-time.js
  * Hiking Time Calculator: estimates total trail time from distance, elevation
  * gain/loss, terrain, pack weight, fitness, altitude, group composition, and
  * planned breaks, using a Naismith-style rule of thumb, transparently adjusted.
@@ -7,7 +7,7 @@
 (function () {
   "use strict";
 
-  var calc = window.CampMath.calc;
+  var calc = window.CampingMath.calc;
 
   var DEFAULTS = {
     distanceMi: 6,
@@ -332,7 +332,7 @@
 
   function copyResultText() {
     if (!lastCopyState) return;
-    var text = "Hiking Time Calculator — Camp Math\n" +
+    var text = "Hiking Time Calculator — CampingMath\n" +
       "Estimated total trail time: " + calc.formatNumber(lastCopyState.low, 1) + "–" + calc.formatNumber(lastCopyState.high, 1) + " hours\n" +
       "Moving time: " + calc.formatNumber(lastCopyState.moving, 1) + " hr\n" +
       "Break time: " + calc.formatNumber(lastCopyState.breakTime, 1) + " hr\n" +

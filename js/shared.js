@@ -1,5 +1,5 @@
 /*!
- * Camp Math — shared.js
+ * CampingMath — shared.js
  * Site-wide behavior used on every page: mobile nav, footer year,
  * the five-star rating widget, and a small toast helper.
  * No dependencies. Safe to load on pages that don't use every feature.
@@ -7,7 +7,7 @@
 (function () {
   "use strict";
 
-  var CampMath = window.CampMath || {};
+  var CampingMath = window.CampingMath || {};
 
   /* ---------- Mobile navigation toggle ---------- */
   function initNav() {
@@ -63,7 +63,7 @@
       toastEl.classList.remove("is-visible");
     }, 2400);
   }
-  CampMath.showToast = showToast;
+  CampingMath.showToast = showToast;
 
   /* ---------- Five-star rating widget ----------
    * Markup contract:
@@ -186,7 +186,7 @@
       })(piece);
     }
   }
-  CampMath.launchConfetti = launchConfetti;
+  CampingMath.launchConfetti = launchConfetti;
 
   document.addEventListener("DOMContentLoaded", function () {
     initNav();
@@ -194,5 +194,5 @@
     initRatingWidgets();
   });
 
-  window.CampMath = CampMath;
+  window.CampingMath = CampingMath;
 })();

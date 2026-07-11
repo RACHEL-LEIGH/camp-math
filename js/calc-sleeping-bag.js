@@ -1,5 +1,5 @@
 /*!
- * Camp Math — calc-sleeping-bag.js
+ * CampingMath — calc-sleeping-bag.js
  * Sleeping Bag Temperature Rating Calculator.
  * All math is done internally in Fahrenheit. The unit toggle only converts
  * what is displayed/typed — the canonical value stored in `state.lowF` is
@@ -9,7 +9,7 @@
 (function () {
   "use strict";
 
-  var calc = window.CampMath && window.CampMath.calc;
+  var calc = window.CampingMath && window.CampingMath.calc;
   if (!calc) return;
 
   var DEFAULTS = {
@@ -39,7 +39,7 @@
   var WIND_LABELS = { moderate: "Moderate wind exposure", exposed: "Exposed to wind" };
 
   /* ---------- Degree-delta unit conversion ----------
-   * fToC/cToF on CampMath.calc.convert are for ABSOLUTE temperatures (they
+   * fToC/cToF on CampingMath.calc.convert are for ABSOLUTE temperatures (they
    * include the 32-degree offset). Buffer amounts are DIFFERENCES in
    * temperature, so converting them must only scale by 5/9 — applying the
    * absolute converter to a delta would introduce a bogus 32-degree shift.
@@ -276,7 +276,7 @@
         ) +
         unit +
         " (based on a " + calc.round(displayValueFor(state.lowF, state.unit), 0) + unit + " overnight low). " +
-        "This targets the comfort rating, not the lower-limit or extreme rating. — Camp Math";
+        "This targets the comfort rating, not the lower-limit or extreme rating. — CampingMath";
       calc.copyResult(text);
     });
   }

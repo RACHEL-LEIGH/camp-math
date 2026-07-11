@@ -1,14 +1,14 @@
 /*!
- * Camp Math — calc-backpack-weight.js
+ * CampingMath — calc-backpack-weight.js
  * Page-specific logic for the Backpack Weight Calculator.
- * Depends on window.CampMath.calc (js/calculators.js) and js/shared.js.
+ * Depends on window.CampingMath.calc (js/calculators.js) and js/shared.js.
  * Do not edit js/calculators.js or js/shared.js — this file is self-contained.
  */
 (function () {
   "use strict";
 
-  var CampMath = window.CampMath || {};
-  var calc = CampMath.calc;
+  var CampingMath = window.CampingMath || {};
+  var calc = CampingMath.calc;
   if (!calc) return;
 
   document.addEventListener("DOMContentLoaded", init);
@@ -194,7 +194,7 @@
 
   /* Backpack starting-weight & percent-of-body-weight estimate:
    * foodWeightLb = foodPerDayLb * days
-   * waterWeightLb = waterLiters * 2.2 (CampMath.calc.waterWeight.lbPerLiter)
+   * waterWeightLb = waterLiters * 2.2 (CampingMath.calc.waterWeight.lbPerLiter)
    * consumableWeightLb = foodWeightLb + waterWeightLb + fuelWeightLb
    * extrasLb = sum(medical, camera, fishing, dog, climbing), or the single
    *   "consumables/specialty extras" field when the breakdown isn't used

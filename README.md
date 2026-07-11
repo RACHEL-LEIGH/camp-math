@@ -1,8 +1,8 @@
-# Camp Math
+# CampingMath
 
 Plan smarter. Pack lighter. Camp better.
 
-Camp Math is a free, static collection of camping and hiking planning calculators —
+CampingMath is a free, static collection of camping and hiking planning calculators —
 tent size, sleeping bag temperature rating, campsite fit, campfire wood, cooler ice,
 propane, hiking time, and backpack weight. It's part of a small family of practical
 planning sites alongside Backyard Math and Split Math.
@@ -33,7 +33,7 @@ js/
   calc-tent-size.js        \
   calc-sleeping-bag.js      |
   calc-campsite-size.js     |  One page-specific logic file per calculator —
-  calc-campfire-wood.js     |  each wires its own form to CampMath.calc helpers
+  calc-campfire-wood.js     |  each wires its own form to CampingMath.calc helpers
   calc-cooler-ice.js        |  and renders its own results.
   calc-propane.js           |
   calc-hiking-time.js       |
@@ -132,7 +132,7 @@ default.
 
 - Manual pass on every calculator with normal values, then zero, blank,
   negative, decimal, and very large inputs — confirmed no `NaN`, `Infinity`,
-  or negative outputs (guarded via `CampMath.calc.toNumber`/`formatNumber`
+  or negative outputs (guarded via `CampingMath.calc.toNumber`/`formatNumber`
   and input clamping).
 - Verified unit toggles (°F/°C, mi/km, ft/m, lb/kg, qt/L) convert from a single
   canonical internal value rather than repeatedly reconverting a displayed

@@ -1,12 +1,12 @@
 /*!
- * Camp Math — calc-tent-size.js
+ * CampingMath — calc-tent-size.js
  * Tent Size Calculator: estimates a realistic tent capacity and floor area
  * from occupants, sleeping setup, pets, and stored gear.
  */
 (function () {
   "use strict";
 
-  var calc = window.CampMath.calc;
+  var calc = window.CampingMath.calc;
 
   var DEFAULTS = {
     adults: 2,
@@ -216,7 +216,7 @@
   }
 
   function copyResultText() {
-    var text = "Tent Size Calculator — Camp Math\n" +
+    var text = "Tent Size Calculator — CampingMath\n" +
       "Comfortable tent size: " + els.lastComfortCapacity + "-person tent\n" +
       "Minimum capacity: " + els.lastMinCapacity + "-person\n" +
       "Floor area needed: " + calc.formatNumber(els.lastFloorArea, 1) + " sq ft\n" +

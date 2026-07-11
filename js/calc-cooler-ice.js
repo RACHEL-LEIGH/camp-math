@@ -1,12 +1,12 @@
 /*!
- * Camp Math — calc-cooler-ice.js
+ * CampingMath — calc-cooler-ice.js
  * Page-specific logic for the Cooler Ice Calculator.
- * Depends on window.CampMath.calc (js/calculators.js) — loaded before this file.
+ * Depends on window.CampingMath.calc (js/calculators.js) — loaded before this file.
  */
 (function () {
   "use strict";
 
-  var calc = window.CampMath && window.CampMath.calc;
+  var calc = window.CampingMath && window.CampingMath.calc;
   if (!calc) return;
 
   var SLUG = "cooler-ice";
