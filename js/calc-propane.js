@@ -1,12 +1,12 @@
 /*!
- * Camp Math — calc-propane.js
+ * CampingMath — calc-propane.js
  * Page logic for the Propane Calculator: a multi-row appliance repeater plus
  * cylinder/reserve/cost settings, with live-updating results.
  */
 (function () {
   "use strict";
 
-  var calc = window.CampMath && window.CampMath.calc;
+  var calc = window.CampingMath && window.CampingMath.calc;
   if (!calc) return;
 
   var BTU_PER_LB_PROPANE = 21600; // standard planning conversion — an approximation, not an exact constant

@@ -1,11 +1,11 @@
 /*!
- * Camp Math — calc-campfire-wood.js
+ * CampingMath — calc-campfire-wood.js
  * Page-specific logic for the Campfire Wood Calculator.
  */
 (function () {
   "use strict";
 
-  var calc = window.CampMath && window.CampMath.calc;
+  var calc = window.CampingMath && window.CampingMath.calc;
   if (!calc) return;
 
   var form = document.getElementById("campfire-form");
@@ -81,7 +81,7 @@
     var weatherAdjustedCuFt = baseCuFt * tempFactor * windFactor * woodFactor + cookingAddition + kindlingAddition;
 
     var bundleSize = inputs.bundleSize > 0 ? inputs.bundleSize : DEFAULTS.bundleSize;
-    // CampMath.calc.roundUpTo rounds up to a cu-ft multiple of bundleSize; divide back down for a bundle count.
+    // CampingMath.calc.roundUpTo rounds up to a cu-ft multiple of bundleSize; divide back down for a bundle count.
     var bundles = weatherAdjustedCuFt > 0 ? calc.roundUpTo(weatherAdjustedCuFt, bundleSize) / bundleSize : 0;
 
     var cost = bundles * inputs.bundlePrice;

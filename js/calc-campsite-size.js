@@ -1,12 +1,12 @@
 /*!
- * Camp Math — calc-campsite-size.js
+ * CampingMath — calc-campsite-size.js
  * Page-specific logic for the Campsite Size calculator.
- * Depends on window.CampMath.calc (js/calculators.js) and js/shared.js.
+ * Depends on window.CampingMath.calc (js/calculators.js) and js/shared.js.
  */
 (function () {
   "use strict";
 
-  var calc = window.CampMath && window.CampMath.calc;
+  var calc = window.CampingMath && window.CampingMath.calc;
   if (!calc) return;
 
   var DEFAULTS = {
