@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tent Size Calculator — What Size Tent Do I Need? | Camp Math</title>
+<meta name="description" content="Find out what size tent you actually need. See real livable capacity, not just the manufacturer's tight person rating, based on sleepers, pets, and gear.">
+<link rel="canonical" href="https://campmath.com/calculators/tent-size.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Camp Math">
+<meta property="og:title" content="Tent Size Calculator — What Size Tent Do I Need?">
+<meta property="og:description" content="Find out what size tent you actually need. See real livable capacity, not just the manufacturer's tight person rating, based on sleepers, pets, and gear.">
+<meta property="og:url" content="https://campmath.com/calculators/tent-size.html">
+<meta property="og:image" content="https://campmath.com/images/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Tent Size Calculator — What Size Tent Do I Need?">
+<meta name="twitter:description" content="Find out what size tent you actually need. See real livable capacity, not just the manufacturer's tight person rating, based on sleepers, pets, and gear.">
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  /* Page-specific: top-down tent diagram, scoped to this page only */
+  .tent-size-diagram .tent-outline { fill: rgba(60, 125, 73, 0.08); stroke: var(--forest-600); stroke-width: 2; transition: width 400ms ease, height 400ms ease, x 400ms ease, y 400ms ease; }
+  .tent-size-diagram .tent-pad { fill: rgba(95, 149, 168, 0.35); stroke: var(--sky-dark); stroke-width: 1.2; }
+  .tent-size-diagram .tent-dim-label { font-size: 11px; fill: var(--text-muted); font-family: var(--font-body); }
+  .tent-size-note { font-size: 0.85rem; color: var(--text-muted); margin-top: var(--space-2); }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/index.html" class="logo" aria-label="Camp Math home">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#2c6339"/><path d="M20 22 L26 9 L39 31 Z" fill="#17351f"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+      <span>Camp<span class="logo-accent">Math</span></span>
+    </a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav">
+      <span class="visually-hidden">Menu</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <nav id="primary-nav" class="primary-nav" data-primary-nav aria-label="Primary">
+      <ul>
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/index.html#calculators" aria-current="page">Calculators</a></li>
+        <li><a href="/about.html">About</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="calc-hero">
+    <div class="container">
+      <p class="breadcrumbs"><a href="/index.html">Home</a> / <a href="/index.html#calculators">Calculators</a> / Tent Size</p>
+      <span class="eyebrow">Campsite Planning</span>
+      <h1>Tent Size Calculator</h1>
+      <p class="calc-intro">Figure out what size tent you actually need to sleep comfortably — not just squeeze into. Manufacturer "person ratings" describe a tight sleeping capacity with sleeping bags shoulder to shoulder and no room for gear; this tool estimates real livable floor space based on your group, sleeping setup, pets, and how much gear you'll store inside.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="calc-layout">
+
+        <div class="card calc-form-card">
+          <h2>Your group and setup</h2>
+          <form id="tent-size-form">
+
+            <div class="field-row">
+              <div class="field" data-field>
+                <label for="ts-adults">Number of adults</label>
+                <input type="number" id="ts-adults" name="adults" min="0" max="20" step="1" value="2" inputmode="numeric">
+                <span class="error-msg" data-error></span>
+              </div>
+              <div class="field" data-field>
+                <label for="ts-children">Number of children</label>
+                <input type="number" id="ts-children" name="children" min="0" max="20" step="1" value="0" inputmode="numeric">
+                <span class="help">Kids typically need about 80% of an adult's sleeping footprint.</span>
+                <span class="error-msg" data-error></span>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field" data-field>
+                <label for="ts-pets">Number of dogs/pets sleeping inside</label>
+                <input type="number" id="ts-pets" name="pets" min="0" max="10" step="1" value="0" inputmode="numeric">
+                <span class="error-msg" data-error></span>
+              </div>
+              <div class="field">
+                <label for="ts-sleep-setup">Sleeping setup</label>
+                <select id="ts-sleep-setup" name="sleepSetup">
+                  <option value="compact">Compact sleeping pads</option>
+                  <option value="wide" selected>Wide sleeping pads</option>
+                  <option value="twin">Twin air mattresses</option>
+                  <option value="queen">Queen air mattresses</option>
+                  <option value="cot">Cots</option>
+                </select>
+                <span class="help">Wider pads and air mattresses take up a lot more floor space than compact backpacking pads.</span>
+              </div>
+            </div>
+
+            <fieldset class="field">
+              <legend>Pet size</legend>
+              <span class="help">Only matters if you entered at least one pet above — larger pets take more floor space.</span>
+              <div class="segmented" data-segmented id="ts-pet-size" role="group" aria-label="Pet size">
+                <button type="button" data-value="small" aria-pressed="false">Small</button>
+                <button type="button" data-value="medium" aria-pressed="true">Medium</button>
+                <button type="button" data-value="large" aria-pressed="false">Large</button>
+              </div>
+            </fieldset>
+
+            <fieldset class="field">
+              <legend>Gear stored inside the tent</legend>
+              <span class="help">Backpacks, boots, and bins that live on the tent floor, not in a vestibule or vehicle.</span>
+              <div class="segmented" data-segmented id="ts-gear" role="group" aria-label="Amount of gear stored inside">
+                <button type="button" data-value="minimal" aria-pressed="false">Minimal</button>
+                <button type="button" data-value="some" aria-pressed="true">Some</button>
+                <button type="button" data-value="most" aria-pressed="false">Most gear</button>
+              </div>
+            </fieldset>
+
+            <fieldset class="field">
+              <legend>Comfort preference</legend>
+              <span class="help">"Cozy" is closer to a manufacturer's tight rating; "Spacious" leaves real room to move.</span>
+              <div class="segmented" data-segmented id="ts-comfort" role="group" aria-label="Comfort preference">
+                <button type="button" data-value="cozy" aria-pressed="false">Cozy</button>
+                <button type="button" data-value="comfortable" aria-pressed="true">Comfortable</button>
+                <button type="button" data-value="spacious" aria-pressed="false">Spacious</button>
+              </div>
+            </fieldset>
+
+          </form>
+        </div>
+
+        <div class="results-panel">
+
+          <div class="card result-primary">
+            <span class="eyebrow">Comfortable tent size</span>
+            <p class="result-value"><span id="ts-comfort-value" data-raw-value="0">0</span><span class="result-unit">-person tent</span></p>
+            <p class="result-sub" id="ts-comfort-sub">Based on 0 sq ft of comfortable floor space for your group.</p>
+          </div>
+
+          <div class="result-grid">
+            <div class="card result-card">
+              <div class="label">Minimum capacity</div>
+              <div class="value"><span id="ts-min-capacity">0</span>-person</div>
+            </div>
+            <div class="card result-card">
+              <div class="label">Floor area needed</div>
+              <div class="value"><span id="ts-floor-area">0.0</span> sq ft</div>
+            </div>
+            <div class="card result-card">
+              <div class="label">Suggested dimensions</div>
+              <div class="value" id="ts-dimensions">0 x 0 ft</div>
+            </div>
+          </div>
+
+          <div class="callout callout-warn" id="ts-crowd-warning" hidden>
+            <h4>This size will likely feel crowded</h4>
+            <p id="ts-crowd-text">A tent whose manufacturer rating just matches your group size would almost certainly feel cramped once pets and gear are inside. Consider sizing up.</p>
+          </div>
+
+          <div class="card diagram-card">
+            <svg class="tent-size-diagram" viewBox="0 0 220 180" width="220" height="180" role="img" aria-labelledby="ts-diagram-title">
+              <title id="ts-diagram-title">Illustrative top-down diagram of the suggested tent footprint</title>
+              <rect class="tent-outline" id="ts-diagram-outline" x="40" y="20" width="140" height="140" rx="14"></rect>
+              <rect class="tent-pad" id="ts-diagram-pad1" x="55" y="35" width="45" height="65" rx="4"></rect>
+              <rect class="tent-pad" id="ts-diagram-pad2" x="120" y="35" width="45" height="65" rx="4"></rect>
+              <text class="tent-dim-label" id="ts-diagram-label" x="110" y="172" text-anchor="middle">0 x 0 ft</text>
+            </svg>
+            <p class="tent-size-note">Illustrative top-down diagram, not to exact scale — real tents aren't perfect squares.</p>
+          </div>
+
+          <details class="why-vary">
+            <summary>Why this estimate may vary</summary>
+            <p>Real tents rarely have perfectly flat, square floors. Sloped walls and tent pole geometry eat into headroom and usable floor space near the edges, vestibules add covered storage that some brands count toward "capacity" and others don't, and manufacturers disagree on how tightly they pack sleepers when assigning a person rating. Treat these numbers as a planning range, not an exact spec.</p>
+          </details>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" id="ts-reset">Reset</button>
+            <button type="button" class="btn btn-primary" id="ts-copy">Copy result</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container prose">
+      <h2>How this estimate is calculated</h2>
+      <p>Every sleeper gets a floor footprint based on the sleeping setup you chose — a compact backpacking pad needs about 10 sq ft, while a queen air mattress needs over 33 sq ft. Children are counted at 80% of an adult's footprint. Pets add floor space based on size (3 sq ft for a small dog up to 10 sq ft for a large one), and stored gear adds a flat allowance on top. We then add 15% for circulation — the space lost to sloped tent walls, poles, and simply moving around — to get a "minimum," tight, manufacturer-style floor area. That minimum is multiplied by a comfort factor (1.05x for cozy, 1.25x for comfortable, 1.5x for spacious) to get the comfortable floor area. Both areas are converted to a "person rating equivalent" using roughly 15 sq ft per person, which is the rough floor area most dome-tent manufacturers assume per sleeper in a tight layout.</p>
+      <p>Suggested dimensions assume a roughly square-ish footprint (side length equals the square root of the comfortable area, rounded up to the nearest half foot) — real tents come in domes, cabins, and tunnels, so use it as a ballpark rather than exact shopping dimensions. If you're also planning where the tent goes at your site, the <a href="/calculators/campsite-size.html">Campsite Size Calculator</a> can check whether that footprint, plus your vehicle and canopy, actually fits your pad.</p>
+
+      <h2>Assumptions &amp; limitations</h2>
+      <ul class="assumption-list">
+        <li>Floor footprints assume sleepers are laid out side by side on the floor, not stacked in bunks or lofts.</li>
+        <li>Pet space assumes the pet sleeps on the tent floor rather than in a crate that's counted elsewhere.</li>
+        <li>Gear allowances are flat estimates (minimal, some, most) rather than itemized per bag or bin.</li>
+        <li>The 15 sq ft/person conversion is a rough industry rule of thumb, not a published standard — brands vary.</li>
+        <li>Suggested dimensions assume a square-ish tent; actual tent shapes (dome, cabin, tunnel) will differ.</li>
+        <li>This tool estimates floor space only — it does not account for peak height, headroom, or door placement.</li>
+      </ul>
+
+      <h2>Practical recommendations</h2>
+      <p>As a rule of thumb, buy for the "comfortable" capacity this calculator suggests, not the minimum. If you're camping with a dog or bringing air mattresses, size up at least one full person-rating over your headcount — a "4-person tent" for two adults and a queen air mattress is common, not overkill. Vestibules are great for muddy boots and wet gear, but don't count on them for anything you need dry or secure overnight; check our <a href="/calculators/backpack-weight.html">Backpack Weight Calculator</a> if you're trying to decide what actually needs to come inside versus staying in a pack outside. And if warmth is the bigger unknown for your trip than floor space, pair this with the <a href="/calculators/sleeping-bag.html">Sleeping Bag Temperature Calculator</a> so you're not just sized right, but warm enough too — these are planning estimates, so always double-check the actual tent's specs before you buy.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Frequently asked questions</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>What does a tent's person rating really mean?</summary>
+          <p class="faq-answer">A "4-person" tent usually means four sleeping pads or bags can fit shoulder to shoulder on the floor with essentially no space for gear, movement, or pets. It's a tight, manufacturer-style capacity — most campers find a tent feels genuinely comfortable at one to two people fewer than its rating.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Is a 4-person tent good for 2 adults and a dog?</summary>
+          <p class="faq-answer">Often, yes, if you're using compact or wide sleeping pads and keeping gear minimal — but with air mattresses, a larger dog, or much gear stored inside, a 4-person tent can feel crowded for two people. Run your numbers above to see whether a warning shows up for your specific setup.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Do vestibules count toward usable floor space?</summary>
+          <p class="faq-answer">Not in this calculator, and we'd recommend not counting on them for much. Vestibules are covered but usually unfloored, unheated, and exposed at the edges — fine for muddy boots or a cooler, but not for anything you want fully dry, secure, or comfortable to sit on.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How much floor space does a queen air mattress really need?</summary>
+          <p class="faq-answer">A queen air mattress is about 60 by 80 inches, which works out to roughly 33 sq ft on its own — more than three times a compact sleeping pad's footprint. That's why tents that comfortably fit two people on pads can feel tight with a single queen mattress inside.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Why does my "6-person" tent feel too small for 4 people and gear?</summary>
+          <p class="faq-answer">Because the rating assumes tight, gear-free sleeping. Once you add real sleeping pads or mattresses, backpacks, boots, and a pet, the usable floor area shrinks fast — this is exactly the gap between "minimum capacity" and "comfortable capacity" this calculator shows.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Should I size up for kids?</summary>
+          <p class="faq-answer">Kids need less floor space than adults, but not nothing — this calculator counts each child at about 80% of an adult's footprint. Families with young kids often still prefer sizing up so there's room for extra bags, stuffed animals, and nighttime shuffling.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How much floor space does a dog need in a tent?</summary>
+          <p class="faq-answer">It depends on size: a small dog needs roughly 3 sq ft, a medium dog about 6 sq ft, and a large dog around 10 sq ft of floor space to lie down and stretch comfortably alongside your sleeping area.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What's the difference between "minimum capacity" and "comfortable capacity" here?</summary>
+          <p class="faq-answer">Minimum capacity is the tight, manufacturer-style person rating based on your raw floor area needs. Comfortable capacity applies a comfort multiplier on top, so there's real room for gear, pets, and moving around without everything touching the tent walls.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Why does this calculator suggest a bigger tent than the number of people camping?</summary>
+          <p class="faq-answer">Because "number of people" and "person rating you should buy" aren't the same thing once you factor in sleeping pads, mattresses, gear, and pets. Buying to the exact headcount is how most campers end up disappointed by a tent that felt spacious in the store.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Are cots more or less space-efficient than sleeping pads?</summary>
+          <p class="faq-answer">Cots take up a similar floor footprint to a wide sleeping pad (around 13 sq ft), but they raise you off the floor, which can free up space underneath for gear storage that this calculator doesn't currently account for.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Does tent shape (dome vs. cabin vs. tunnel) change how much usable space I get?</summary>
+          <p class="faq-answer">Yes. Cabin-style tents have straighter walls and more usable floor space near the edges than domes or tunnels of the same footprint, since domes lose more space to sloped walls. This calculator estimates raw floor area; it can't tell you how a specific tent's shape will feel.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Is bigger always better when choosing a tent size?</summary>
+          <p class="faq-answer">Not necessarily — bigger tents weigh more, cost more, take longer to heat up on cold nights, and can be harder to pitch on a small site. Use the "spacious" comfort setting only if you genuinely have the site space and are willing to carry or drive the extra bulk.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <h2>Related calculators</h2>
+      </div>
+      <div class="related-grid">
+        <a class="card calc-card" href="/calculators/campsite-size.html">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 L3 6 v14 l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4 v14 M15 6 v14"/></svg></div>
+          <h3>Campsite Size Calculator</h3>
+          <p>Check whether your tent, vehicles, and canopy will actually fit the pad.</p>
+          <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="card calc-card" href="/calculators/sleeping-bag.html">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="6" rx="3"/><path d="M7 9 v9a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3V9"/><path d="M7 13 h10 M7 17 h10"/></svg></div>
+          <h3>Sleeping Bag Temperature Calculator</h3>
+          <p>Get a recommended comfort rating based on conditions and your sleep setup.</p>
+          <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="card calc-card" href="/calculators/backpack-weight.html">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 8V6a4 4 0 0 1 8 0v2"/><rect x="5" y="8" width="14" height="13" rx="3"/></svg></div>
+          <h3>Backpack Weight Calculator</h3>
+          <p>Estimate a sane pack-weight range as a share of your body weight.</p>
+          <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="card rating-widget" data-rating="tent-size">
+    <h2 class="rating-title">How useful was this calculator?</h2>
+    <div class="stars" role="radiogroup" aria-label="Star rating">
+      <button type="button" class="star" data-value="1" aria-label="1 star">&#9733;</button>
+      <button type="button" class="star" data-value="2" aria-label="2 stars">&#9733;</button>
+      <button type="button" class="star" data-value="3" aria-label="3 stars">&#9733;</button>
+      <button type="button" class="star" data-value="4" aria-label="4 stars">&#9733;</button>
+      <button type="button" class="star" data-value="5" aria-label="5 stars">&#9733;</button>
+    </div>
+    <p class="rating-thanks" hidden>Thanks for your feedback!</p>
+  </section>
+
+</main>
+
+<footer class="site-footer contour-tile">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <a href="/index.html" class="logo" aria-label="Camp Math home">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#eef4ec"/><path d="M20 22 L26 9 L39 31 Z" fill="#cfe0cd"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+        <span>Camp<span class="logo-accent">Math</span></span>
+      </a>
+      <p class="footer-tagline">Plan smarter. Pack lighter. Camp better. Free calculators for campsite planning, comfort, fuel, and hiking.</p>
+    </div>
+    <div class="footer-col">
+      <h3>Calculators</h3>
+      <ul>
+        <li><a href="/calculators/tent-size.html">Tent Size</a></li>
+        <li><a href="/calculators/sleeping-bag.html">Sleeping Bag Temperature</a></li>
+        <li><a href="/calculators/campsite-size.html">Campsite Size</a></li>
+        <li><a href="/calculators/campfire-wood.html">Campfire Wood</a></li>
+        <li><a href="/calculators/cooler-ice.html">Cooler Ice</a></li>
+        <li><a href="/calculators/propane.html">Propane</a></li>
+        <li><a href="/calculators/hiking-time.html">Hiking Time</a></li>
+        <li><a href="/calculators/backpack-weight.html">Backpack Weight</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h3>Company</h3>
+      <ul>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="/terms-of-use.html">Terms of Use</a></li>
+        <li><a href="/disclaimer.html">Disclaimer</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <p>&copy; <span data-current-year></span> Camp Math. Estimates for planning purposes only — not professional, medical, engineering, or safety advice. See our <a href="/disclaimer.html">disclaimer</a>.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/shared.js"></script>
+<script src="/js/calculators.js"></script>
+<script src="/js/calc-tent-size.js"></script>
+</body>
+</html>

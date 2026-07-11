@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backpack Weight Calculator — How Heavy Should My Pack Be? | Camp Math</title>
+<meta name="description" content="Estimate a sane starting backpack weight and see it as a percent of your body weight, based on gear, food, water, fuel, season, and experience level.">
+<link rel="canonical" href="https://campmath.com/calculators/backpack-weight.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Camp Math">
+<meta property="og:title" content="Backpack Weight Calculator — How Heavy Should My Pack Be?">
+<meta property="og:description" content="Estimate a sane starting backpack weight and see it as a percent of your body weight, based on gear, food, water, fuel, season, and experience level.">
+<meta property="og:url" content="https://campmath.com/calculators/backpack-weight.html">
+<meta property="og:image" content="https://campmath.com/images/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Backpack Weight Calculator — How Heavy Should My Pack Be?">
+<meta name="twitter:description" content="Estimate a sane starting backpack weight and see it as a percent of your body weight, based on gear, food, water, fuel, season, and experience level.">
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/index.html" class="logo" aria-label="Camp Math home">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#2c6339"/><path d="M20 22 L26 9 L39 31 Z" fill="#17351f"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+      <span>Camp<span class="logo-accent">Math</span></span>
+    </a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav">
+      <span class="visually-hidden">Menu</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <nav id="primary-nav" class="primary-nav" data-primary-nav aria-label="Primary">
+      <ul>
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/index.html#calculators" aria-current="page">Calculators</a></li>
+        <li><a href="/about.html">About</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="calc-hero">
+    <div class="container">
+      <p class="breadcrumbs"><a href="/index.html">Home</a> / <a href="/index.html#calculators">Calculators</a> / Backpack Weight</p>
+      <span class="eyebrow">Trail &amp; Gear Planning</span>
+      <h1>Backpack Weight Calculator</h1>
+      <p class="calc-intro">Estimate a sane starting pack weight without needing a fully itemized gear spreadsheet. Enter your body weight, base gear, food, water, and fuel, and this tool shows your total starting pack weight, what that is as a percent of your body weight, and a rough sense of whether that's light, moderate, or heavy for your experience level and trip conditions.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="calc-layout">
+
+        <div class="card calc-form-card">
+          <h2>Your body, gear, and trip</h2>
+          <form id="bpw-form" novalidate>
+
+            <fieldset class="field">
+              <legend>Weight units</legend>
+              <span class="help">Applies to body weight, base gear weight, and the optional extras breakdown below.</span>
+              <div class="unit-toggle" data-segmented id="bpw-weight-unit" role="group" aria-label="Weight units">
+                <button type="button" data-value="lb" aria-pressed="true">lb</button>
+                <button type="button" data-value="kg" aria-pressed="false">kg</button>
+              </div>
+            </fieldset>
+
+            <div class="field-row">
+              <div class="field" data-field>
+                <label for="bpw-body-weight">Hiker body weight</label>
+                <input type="number" id="bpw-body-weight" name="bodyWeight" value="160" min="20" max="500" step="1" inputmode="decimal">
+                <span class="help">In <span data-weight-unit-text>lb</span>. Used to figure your pack weight as a percent of body weight.</span>
+                <span class="error-msg" data-error></span>
+              </div>
+              <div class="field" data-field>
+                <label for="bpw-gear-weight">Estimated base gear weight</label>
+                <input type="number" id="bpw-gear-weight" name="gearWeight" value="18" min="0" max="150" step="0.5" inputmode="decimal">
+                <span class="help">Shelter, sleep system, cook system, clothing, and other non-consumable gear combined, including the pack itself, in <span data-weight-unit-text>lb</span>.</span>
+                <span class="error-msg" data-error></span>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field" data-field>
+                <label for="bpw-food-per-day">Food weight per day</label>
+                <input type="number" id="bpw-food-per-day" name="foodPerDay" value="1.5" min="0" max="10" step="0.1" inputmode="decimal">
+                <span class="help">In lb/day. Typical backpacking food averages 1.5–2.5 lb per person per day.</span>
+                <span class="error-msg" data-error></span>
+              </div>
+              <div class="field" data-field>
+                <label for="bpw-days">Number of days</label>
+                <input type="number" id="bpw-days" name="days" value="3" min="0" max="30" step="1" inputmode="numeric">
+                <span class="error-msg" data-error></span>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field" data-field>
+                <label for="bpw-water">Water carried</label>
+                <input type="number" id="bpw-water" name="water" value="2" min="0" max="20" step="0.1" inputmode="decimal">
+                <span class="help">How much you're carrying at the heaviest point of the day, not total water for the whole trip.</span>
+                <span class="error-msg" data-error></span>
+              </div>
+              <div class="field">
+                <span id="bpw-water-unit-legend">Water unit</span>
+                <div class="unit-toggle" data-segmented id="bpw-water-unit" role="group" aria-labelledby="bpw-water-unit-legend">
+                  <button type="button" data-value="liters" aria-pressed="true">Liters</button>
+                  <button type="button" data-value="gallons" aria-pressed="false">Gallons</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field" data-field>
+                <label for="bpw-fuel">Fuel weight</label>
+                <input type="number" id="bpw-fuel" name="fuel" value="0.5" min="0" max="20" step="0.1" inputmode="decimal">
+                <span class="help">In lb, for the canister or bottle you're carrying (full or partial).</span>
+                <span class="error-msg" data-error></span>
+              </div>
+              <div class="field" data-field>
+                <label for="bpw-extras">Consumables/specialty gear extras</label>
+                <input type="number" id="bpw-extras" name="extras" value="0" min="0" max="100" step="0.1" inputmode="decimal">
+                <span class="help">In lb. Sum of any optional extras below, or enter a combined number directly.</span>
+                <span class="error-msg" data-error></span>
+              </div>
+            </div>
+
+            <fieldset class="field">
+              <legend>Season</legend>
+              <span class="help">Colder, harsher seasons nudge the rough "heavy" threshold up a bit.</span>
+              <div class="segmented" data-segmented id="bpw-season" role="group" aria-label="Season">
+                <button type="button" data-value="summer" aria-pressed="true">Summer</button>
+                <button type="button" data-value="shoulder" aria-pressed="false">Shoulder season</button>
+                <button type="button" data-value="winter" aria-pressed="false">Winter</button>
+              </div>
+            </fieldset>
+
+            <fieldset class="field">
+              <legend>Trip style</legend>
+              <span class="help">Ultralight setups expect a lower share of body weight; comfort-focused setups allow more.</span>
+              <div class="segmented" data-segmented id="bpw-trip-style" role="group" aria-label="Trip style">
+                <button type="button" data-value="ultralight" aria-pressed="false">Ultralight</button>
+                <button type="button" data-value="lightweight" aria-pressed="true">Lightweight</button>
+                <button type="button" data-value="traditional" aria-pressed="false">Traditional</button>
+                <button type="button" data-value="comfort_focused" aria-pressed="false">Comfort-focused</button>
+              </div>
+            </fieldset>
+
+            <fieldset class="field">
+              <legend>Experience</legend>
+              <span class="help">More experienced hikers typically tolerate a higher percent of body weight comfortably.</span>
+              <div class="segmented" data-segmented id="bpw-experience" role="group" aria-label="Experience level">
+                <button type="button" data-value="beginner" aria-pressed="false">Beginner</button>
+                <button type="button" data-value="intermediate" aria-pressed="true">Intermediate</button>
+                <button type="button" data-value="experienced" aria-pressed="false">Experienced</button>
+              </div>
+            </fieldset>
+
+            <details>
+              <summary>Add optional extras (medical, camera, fishing, dog, or climbing gear)</summary>
+              <div class="field-row cols-3" style="margin-top: var(--space-4);">
+                <div class="field" data-field>
+                  <label for="bpw-medical">Medical gear</label>
+                  <input type="number" id="bpw-medical" name="medical" value="0" min="0" max="50" step="0.1" inputmode="decimal">
+                  <span class="help">In <span data-weight-unit-text>lb</span>.</span>
+                  <span class="error-msg" data-error></span>
+                </div>
+                <div class="field" data-field>
+                  <label for="bpw-camera">Camera gear</label>
+                  <input type="number" id="bpw-camera" name="camera" value="0" min="0" max="50" step="0.1" inputmode="decimal">
+                  <span class="help">In <span data-weight-unit-text>lb</span>.</span>
+                  <span class="error-msg" data-error></span>
+                </div>
+                <div class="field" data-field>
+                  <label for="bpw-fishing">Fishing gear</label>
+                  <input type="number" id="bpw-fishing" name="fishing" value="0" min="0" max="50" step="0.1" inputmode="decimal">
+                  <span class="help">In <span data-weight-unit-text>lb</span>.</span>
+                  <span class="error-msg" data-error></span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field" data-field>
+                  <label for="bpw-dog">Dog gear</label>
+                  <input type="number" id="bpw-dog" name="dog" value="0" min="0" max="50" step="0.1" inputmode="decimal">
+                  <span class="help">In <span data-weight-unit-text>lb</span>.</span>
+                  <span class="error-msg" data-error></span>
+                </div>
+                <div class="field" data-field>
+                  <label for="bpw-climbing">Climbing gear</label>
+                  <input type="number" id="bpw-climbing" name="climbing" value="0" min="0" max="50" step="0.1" inputmode="decimal">
+                  <span class="help">In <span data-weight-unit-text>lb</span>.</span>
+                  <span class="error-msg" data-error></span>
+                </div>
+              </div>
+              <p class="help">When any extra above is greater than zero, it replaces the combined "consumables/specialty gear extras" field above with the sum of these entries.</p>
+            </details>
+
+          </form>
+        </div>
+
+        <div class="results-panel">
+
+          <div class="card result-primary">
+            <span class="eyebrow">Estimated starting pack weight</span>
+            <p class="result-value"><span id="bpw-total-value" data-raw-value="0">0</span><span class="result-unit"> lb starting pack weight</span></p>
+            <p class="result-sub" id="bpw-percent-sub">0% of body weight</p>
+          </div>
+
+          <div class="result-grid">
+            <div class="card result-card">
+              <div class="label">Base weight</div>
+              <div class="value"><span id="bpw-base-value">0.0</span> lb</div>
+            </div>
+            <div class="card result-card">
+              <div class="label">Consumable weight</div>
+              <div class="value"><span id="bpw-consumable-value">0.0</span> lb</div>
+            </div>
+            <div class="card result-card">
+              <div class="label">Category</div>
+              <div class="value" id="bpw-category-value">Moderate</div>
+            </div>
+            <div class="card result-card" id="bpw-reduction-card" hidden>
+              <div class="label">Suggested reduction target</div>
+              <div class="value"><span id="bpw-reduction-value">0.0</span> lb</div>
+            </div>
+          </div>
+
+          <div class="callout" id="bpw-recommendation">
+            <h4 id="bpw-recommendation-title">Your pack weight looks reasonable</h4>
+            <p id="bpw-recommendation-text">Fill in the form to see tailored suggestions here.</p>
+          </div>
+
+          <div class="callout callout-info">
+            <h4>Rough guideline, not a rule</h4>
+            <p>Pack-weight percentage rules like "10–20% of body weight" are rough guidelines, not a universal safe fact. Individual ability, pack fit and suspension, terrain, trip duration, conditioning, and medical factors all matter more than hitting an exact percentage — use this estimate as a starting point for planning, not a pass/fail test.</p>
+          </div>
+
+          <div class="card diagram-card">
+            <div class="gauge" role="img" aria-label="Percent of body weight compared with your rough target ceiling">
+              <div class="gauge-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <div class="gauge-fill" id="bpw-gauge-fill"></div>
+              </div>
+              <div class="gauge-labels">
+                <span>0%</span>
+                <span>30%+ of body weight</span>
+              </div>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: var(--space-2);">Gauge fill shows your percent of body weight on a 0–30% scale; it turns orange once you're over your rough target ceiling for the settings above.</p>
+          </div>
+
+          <details class="why-vary">
+            <summary>Why this estimate may vary</summary>
+            <p>This estimate is only as accurate as the numbers you enter — weighing gear on a kitchen or luggage scale beats guessing. We assume "base gear weight" already includes the pack itself; if you weighed your gear without the empty pack, your real total will run a bit higher than shown here. Finally, two packs at the exact same weight can feel very different on the trail depending on how the load is distributed and how well the pack's frame and hip belt actually fit your body, which this calculator has no way to measure.</p>
+          </details>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" id="bpw-reset">Reset</button>
+            <button type="button" class="btn btn-primary" id="bpw-copy">Copy result</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container prose">
+      <h2>How this estimate is calculated</h2>
+      <p>We add up your consumables — food (daily rate times number of days), water (converted from volume to weight at roughly 2.2 lb per liter, or 8.34 lb per gallon), and fuel — plus your base gear weight and any extras, to get a total starting pack weight. That total is then expressed as a percent of your body weight, since a given number of pounds feels very different on a 120 lb hiker versus a 220 lb hiker.</p>
+      <p>Your rough "heavy" ceiling (target max percent) starts from your experience level (15% beginner, 20% intermediate, 25% experienced), then adds a bit for colder seasons (+1.5 shoulder season, +3 winter) and adjusts for trip style (-3 ultralight, +3 comfort-focused), clamped to a sane 8–32% band. Your pack is then labeled Ultralight, Lightweight, Moderate, or Heavy depending on where your actual percent falls relative to that ceiling. If you're also curious how pack weight affects your pace on trail, try pairing this with our <a href="/calculators/hiking-time.html">Hiking Time Calculator</a>, which factors elevation gain and effort into an estimated hiking time.</p>
+      <div class="formula-box">
+        <p><strong>Totals</strong>:<br>
+        <code>foodWeightLb = foodPerDayLb × days</code><br>
+        <code>waterWeightLb = waterLiters × 2.2</code><br>
+        <code>consumableWeightLb = foodWeightLb + waterWeightLb + fuelWeightLb</code><br>
+        <code>totalStartingWeightLb = baseGearWeightLb + consumableWeightLb + extrasLb</code></p>
+        <p><strong>Percent and category</strong>:<br>
+        <code>percentOfBodyWeight = (totalStartingWeightLb / bodyWeightLb) × 100</code><br>
+        <code>targetMaxPercent</code> = experience base + season adjustment + trip style adjustment, clamped to 8–32<br>
+        Category is Ultralight, Lightweight, Moderate, or Heavy depending on percent vs. <code>targetMaxPercent</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container prose">
+      <h2>Assumptions &amp; limitations</h2>
+      <ul class="assumption-list">
+        <li>Percent-of-body-weight guidelines are rough rules of thumb, not medical or safety limits — personal conditioning, pack fit, and terrain matter more than hitting an exact number.</li>
+        <li>"Base gear weight" is assumed to already include the pack itself, not just the contents inside it.</li>
+        <li>Food weight per day is a flat daily average; your own meal plan may run lighter or heavier than 1.5–2.5 lb/day.</li>
+        <li>Water weight uses a simple 2.2 lb-per-liter conversion; it estimates what you're carrying, not what you'll actually drink en route.</li>
+        <li>The optional extras breakdown is a flat sum of what you enter — it can't detect an item that's also already counted inside "base gear weight."</li>
+        <li>Season, trip style, and experience adjustments to the "heavy" threshold are simplified planning nudges, not a clinical or scientific standard.</li>
+      </ul>
+
+      <h2>Practical recommendations</h2>
+      <ul>
+        <li>If your pack lands in the "Heavy" category, look at the "big three" first — shelter, sleep system, and the pack itself — since ounces saved there carry over every single day of the trip. Our <a href="/calculators/tent-size.html">Tent Size Calculator</a> can help you check whether a smaller, lighter tent still fits your group comfortably.</li>
+        <li>Repackage consumables before you weigh in: decant food out of boxes into resealable bags, and only bring the fuel and toiletries you'll actually use for this trip's length.</li>
+        <li>If your route has reliable, safe water sources, plan refill stops instead of carrying a full day's water from the trailhead — water is heavy and it's the easiest weight to shed and regain along the way.</li>
+        <li>Do a short shakedown hike with your loaded pack before a big trip. Weight that feels fine in the driveway can feel very different at mile eight, and it's a much better time to catch an uncomfortable load than on day one of a longer trip.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <h2>Frequently asked questions</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>What is base weight in backpacking?</summary>
+          <p class="faq-answer">Base weight is the weight of your pack and gear excluding consumables like food, water, and fuel that get used up and lightened over the trip. In this calculator, "base gear weight" is assumed to already include the pack itself.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What percentage of my body weight should my pack be?</summary>
+          <p class="faq-answer">A commonly cited rough range is about 10-20% of body weight for most backpackers, with beginners often more comfortable near the lower end and experienced hikers tolerating somewhat more. This calculator adjusts that rough ceiling for your experience, season, and trip style rather than using one fixed number.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Does the 20% rule actually apply to everyone?</summary>
+          <p class="faq-answer">No. It's a widely repeated rough guideline, not a universal safe fact. Individual fitness, pack fit and suspension, terrain, trip duration, conditioning, and any medical conditions all affect what's actually reasonable for a given person far more than hitting one exact percentage.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How much does water really add to pack weight?</summary>
+          <p class="faq-answer">A lot — roughly 2.2 lb per liter (8.34 lb per gallon). Carrying just 3 liters adds about 6.6 lb, which is often more than an entire day's food. That's why planning realistic refill stops can matter more for pack weight than almost any gear swap.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What's the fastest way to cut pack weight?</summary>
+          <p class="faq-answer">Start with the "big three" — shelter, sleep system, and the pack itself — since they're usually the heaviest individual items and small upgrades there add up fast. After that, repackaging consumables (food, fuel, toiletries) and carrying only the water you need until the next reliable source are the next-highest-leverage changes.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Does this calculator include the weight of the pack itself?</summary>
+          <p class="faq-answer">Yes, but only if you do — this tool assumes the "base gear weight" you enter already includes the empty pack's weight. If you weighed your gear without the pack, add the pack's weight into that field, or your total will read lower than reality.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How much should a beginner's backpack weigh?</summary>
+          <p class="faq-answer">This calculator uses a rougher 15% of body weight as a starting ceiling for beginners before flagging a pack as "heavy," a bit lower than the ceilings used for intermediate or experienced hikers. New backpackers generally do better starting lighter while they build conditioning and pack-fitting experience.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Why does my target percentage change with season and trip style?</summary>
+          <p class="faq-answer">Winter and shoulder-season trips typically require bulkier insulation, a warmer sleep system, and more layers, so this calculator nudges the rough "heavy" ceiling up slightly for those seasons. Trip style works the same way — ultralight setups expect a lower percentage of body weight, while comfort-focused setups intentionally allow more.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Is a heavier pack always bad?</summary>
+          <p class="faq-answer">Not necessarily. An experienced, well-conditioned hiker with a well-fitted pack can often carry a higher percentage of body weight comfortably than a beginner with an ill-fitting pack at a lower weight. Comfort, fit, and conditioning matter as much as the raw number.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How is "food weight per day" estimated?</summary>
+          <p class="faq-answer">This calculator uses a flat daily rate (default 1.5 lb/day) multiplied by your number of days. Typical backpacking food averages roughly 1.5-2.5 lb per person per day depending on calorie density and how much fresh (versus dehydrated) food you're carrying.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What's the difference between base weight and total pack weight?</summary>
+          <p class="faq-answer">Base weight is your non-consumable gear (shelter, sleep system, cook system, clothing, and the pack itself). Total starting pack weight adds consumables on top — food, water, and fuel — which is naturally at its heaviest on day one and gets lighter as you eat, drink, and burn fuel.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Should kids carry a percentage of their body weight too?</summary>
+          <p class="faq-answer">This calculator is built around adult hikers and doesn't model children specifically. If you're planning a kid's pack, most guidance suggests starting well below adult percentages and adjusting heavily based on the individual child's age, fitness, and comfort rather than any fixed formula.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Related calculators</h2>
+      </div>
+      <div class="related-grid">
+        <a class="card calc-card" href="/calculators/hiking-time.html">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18 L9 8 L13 14 L16 9 L21 18"/></svg></div>
+          <h3>Hiking Time Calculator</h3>
+          <p>Estimate hiking time based on distance, elevation gain, and pace.</p>
+          <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="card calc-card" href="/calculators/tent-size.html">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20 L12 5 L21 20"/><path d="M9.5 20 L12 13 L14.5 20"/><path d="M3 20 H21"/></svg></div>
+          <h3>Tent Size Calculator</h3>
+          <p>Find out what size tent you actually need to sleep comfortably.</p>
+          <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="card calc-card" href="/calculators/sleeping-bag.html">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="6" rx="3"/><path d="M7 9 v9a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3V9"/><path d="M7 13 h10 M7 17 h10"/></svg></div>
+          <h3>Sleeping Bag Temperature Calculator</h3>
+          <p>Get a recommended comfort rating based on conditions and your sleep setup.</p>
+          <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="card rating-widget" data-rating="backpack-weight">
+    <h2 class="rating-title">How useful was this calculator?</h2>
+    <div class="stars" role="radiogroup" aria-label="Star rating">
+      <button type="button" class="star" data-value="1" aria-label="1 star">&#9733;</button>
+      <button type="button" class="star" data-value="2" aria-label="2 stars">&#9733;</button>
+      <button type="button" class="star" data-value="3" aria-label="3 stars">&#9733;</button>
+      <button type="button" class="star" data-value="4" aria-label="4 stars">&#9733;</button>
+      <button type="button" class="star" data-value="5" aria-label="5 stars">&#9733;</button>
+    </div>
+    <p class="rating-thanks" hidden>Thanks for your feedback!</p>
+  </section>
+
+</main>
+
+<footer class="site-footer contour-tile">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <a href="/index.html" class="logo" aria-label="Camp Math home">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#eef4ec"/><path d="M20 22 L26 9 L39 31 Z" fill="#cfe0cd"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+        <span>Camp<span class="logo-accent">Math</span></span>
+      </a>
+      <p class="footer-tagline">Plan smarter. Pack lighter. Camp better. Free calculators for campsite planning, comfort, fuel, and hiking.</p>
+    </div>
+    <div class="footer-col">
+      <h3>Calculators</h3>
+      <ul>
+        <li><a href="/calculators/tent-size.html">Tent Size</a></li>
+        <li><a href="/calculators/sleeping-bag.html">Sleeping Bag Temperature</a></li>
+        <li><a href="/calculators/campsite-size.html">Campsite Size</a></li>
+        <li><a href="/calculators/campfire-wood.html">Campfire Wood</a></li>
+        <li><a href="/calculators/cooler-ice.html">Cooler Ice</a></li>
+        <li><a href="/calculators/propane.html">Propane</a></li>
+        <li><a href="/calculators/hiking-time.html">Hiking Time</a></li>
+        <li><a href="/calculators/backpack-weight.html">Backpack Weight</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h3>Company</h3>
+      <ul>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="/terms-of-use.html">Terms of Use</a></li>
+        <li><a href="/disclaimer.html">Disclaimer</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <p>&copy; <span data-current-year></span> Camp Math. Estimates for planning purposes only — not professional, medical, engineering, or safety advice. See our <a href="/disclaimer.html">disclaimer</a>.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/shared.js"></script>
+<script src="/js/calculators.js"></script>
+<script src="/js/calc-backpack-weight.js"></script>
+</body>
+</html>
