@@ -1,0 +1,3 @@
+[build]
+  publish = "."
+  # Plain static HTML/CSS/JS site — no build step, nothing to compile.

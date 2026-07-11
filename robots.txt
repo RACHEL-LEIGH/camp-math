@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://campmath.com/sitemap.xml
+Sitemap: https://campingmath.com/sitemap.xml

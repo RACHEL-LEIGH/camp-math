@@ -150,7 +150,7 @@ default.
 
 - Replace `images/og-image.png` (a generated placeholder) with a designed
   social-share image.
-- Register `campmath.com` (or update canonical/OG URLs if the domain differs)
+- Register `campingmath.com` (or update canonical/OG URLs if the domain differs)
   and connect the repo to Netlify.
 - If analytics is desired, add Google's `gtag.js` snippet to each page's
   `<head>` — the rating widgets already fire a `calculator_rating` event when
