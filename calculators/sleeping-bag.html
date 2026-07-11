@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sleeping Bag Temperature Rating Calculator | Camp Math</title>
+<meta name="description" content="Find the sleeping bag comfort rating you actually need based on your overnight low, pad R-value, shelter type, and sleep habits. Free, instant calculator.">
+<link rel="canonical" href="https://campingmath.com/calculators/sleeping-bag.html">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Camp Math">
+<meta property="og:title" content="Sleeping Bag Temperature Rating Calculator | Camp Math">
+<meta property="og:description" content="Find the sleeping bag comfort rating you actually need based on your overnight low, pad R-value, shelter type, and sleep habits. Free, instant calculator.">
+<meta property="og:url" content="https://campingmath.com/calculators/sleeping-bag.html">
+<meta property="og:image" content="https://campingmath.com/images/og-image.png">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sleeping Bag Temperature Rating Calculator | Camp Math">
+<meta name="twitter:description" content="Find the sleeping bag comfort rating you actually need based on your overnight low, pad R-value, shelter type, and sleep habits. Free, instant calculator.">
+
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  /* Page-specific layout tweaks — scoped, not touching shared stylesheet. */
+  .sb-field-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; margin-bottom: 0.35em; }
+  .sb-field-head label, .sb-field-head legend { margin-bottom: 0; }
+  .sb-breakdown-card ul { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-2); font-size: 0.9rem; color: var(--text-muted); }
+  .sb-breakdown-card li { padding-left: 1.1em; position: relative; }
+  .sb-breakdown-card li::before { content: "\2022"; position: absolute; left: 0; color: var(--forest-500); font-weight: 700; }
+  .sb-rating-scale { display: grid; gap: var(--space-3); margin-top: var(--space-3); }
+  .sb-rating-scale .sb-scale-item { padding-left: 1em; border-left: 3px solid var(--forest-500); }
+  .sb-rating-scale .sb-scale-item.lower-limit { border-left-color: var(--ember); }
+  .sb-rating-scale .sb-scale-item.extreme { border-left-color: var(--danger); }
+  .sb-hero-icon { margin-bottom: var(--space-3); }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/index.html" class="logo" aria-label="Camp Math home">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#2c6339"/><path d="M20 22 L26 9 L39 31 Z" fill="#17351f"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+      <span>Camp<span class="logo-accent">Math</span></span>
+    </a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav">
+      <span class="visually-hidden">Menu</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <nav id="primary-nav" class="primary-nav" data-primary-nav aria-label="Primary">
+      <ul>
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/index.html#calculators" aria-current="page">Calculators</a></li>
+        <li><a href="/about.html">About</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="calc-hero">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/index.html">Home</a> / <a href="/index.html#calculators">Calculators</a> / <span aria-current="page">Sleeping Bag Temperature</span>
+      </nav>
+      <div class="icon-badge sb-hero-icon" style="background: var(--forest-100); color: var(--forest-700);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="6" rx="3"/><path d="M7 9 v9a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3V9"/><path d="M7 13 h10 M7 17 h10"/></svg>
+      </div>
+      <span class="eyebrow">Camp Comfort</span>
+      <h1>Sleeping Bag Temperature Rating Calculator</h1>
+      <p class="calc-intro">Wondering if that 20-degree bag is actually warm enough for your trip? This tool turns your expected overnight low, sleep setup, and conditions into a recommended comfort rating — so you can shop for (or pack) the right bag instead of guessing. It's a planning estimate, not a guarantee that any bag alone will keep you safe overnight.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="calc-layout">
+
+        <div class="card calc-form-card">
+          <h2>Your conditions &amp; setup</h2>
+
+          <div class="field" data-field>
+            <div class="sb-field-head">
+              <label for="expected-low">Expected overnight low</label>
+              <div class="unit-toggle" id="unit-toggle" role="group" aria-label="Temperature unit">
+                <button type="button" data-value="F" aria-pressed="true">&deg;F</button>
+                <button type="button" data-value="C" aria-pressed="false">&deg;C</button>
+              </div>
+            </div>
+            <input type="number" id="expected-low" inputmode="decimal" step="1" value="35" aria-describedby="expected-low-help">
+            <span class="help" id="expected-low-help">The coldest temperature (<span id="low-unit-label">°F</span>) you expect at your campsite overnight — not the daytime high.</span>
+            <span class="error-msg" data-error></span>
+          </div>
+
+          <fieldset class="field" data-field>
+            <legend>Sleeper type</legend>
+            <div class="segmented" id="sleeper-segmented" role="group" aria-label="Sleeper type">
+              <button type="button" data-value="runs_warm" aria-pressed="false">Runs warm</button>
+              <button type="button" data-value="average" aria-pressed="true">Average</button>
+              <button type="button" data-value="runs_cold" aria-pressed="false">Runs cold</button>
+            </div>
+            <span class="help">Some people sleep noticeably warmer or colder than average — be honest with yourself here.</span>
+          </fieldset>
+
+          <div class="field" data-field>
+            <label for="pad-rvalue">Sleeping pad R-value</label>
+            <input type="number" id="pad-rvalue" inputmode="decimal" step="0.5" min="0" value="4" aria-describedby="pad-rvalue-help">
+            <span class="help" id="pad-rvalue-help">R-value measures how well your pad blocks cold rising from the ground — the higher the number, the warmer the pad. Check the tag or product listing.</span>
+            <span class="error-msg" data-error></span>
+          </div>
+
+          <div class="field" data-field>
+            <label for="shelter-type">Shelter type</label>
+            <select id="shelter-type">
+              <option value="enclosed_tent" selected>Enclosed tent</option>
+              <option value="hammock_underquilt">Hammock with underquilt</option>
+              <option value="hammock_no_underquilt">Hammock without underquilt</option>
+              <option value="vehicle">Vehicle</option>
+              <option value="open_shelter">Open shelter (tarp, bivy, under the stars)</option>
+            </select>
+            <span class="help">Your shelter changes how much wind and radiant heat loss reaches your bag.</span>
+          </div>
+
+          <fieldset class="field" data-field>
+            <legend>Clothing while sleeping</legend>
+            <div class="segmented" id="clothing-segmented" role="group" aria-label="Clothing while sleeping">
+              <button type="button" data-value="light_base_layer" aria-pressed="false">Light base layer</button>
+              <button type="button" data-value="warm_base_layer" aria-pressed="true">Warm base layer</button>
+              <button type="button" data-value="insulated_layers" aria-pressed="false">Insulated layers</button>
+            </div>
+          </fieldset>
+
+          <fieldset class="field" data-field>
+            <legend>Humidity / moisture</legend>
+            <div class="segmented" id="humidity-segmented" role="group" aria-label="Humidity or moisture">
+              <button type="button" data-value="dry" aria-pressed="true">Dry</button>
+              <button type="button" data-value="moderate" aria-pressed="false">Moderate</button>
+              <button type="button" data-value="damp" aria-pressed="false">Damp</button>
+            </div>
+            <span class="help">Damp air and condensation both rob a bag's loft of its insulating power.</span>
+          </fieldset>
+
+          <fieldset class="field" data-field>
+            <legend>Wind exposure</legend>
+            <div class="segmented" id="wind-segmented" role="group" aria-label="Wind exposure">
+              <button type="button" data-value="sheltered" aria-pressed="true">Sheltered</button>
+              <button type="button" data-value="moderate" aria-pressed="false">Moderate</button>
+              <button type="button" data-value="exposed" aria-pressed="false">Exposed</button>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="results-panel">
+          <div class="card result-primary">
+            <span class="eyebrow">Recommended bag rating</span>
+            <div class="result-value">
+              <span id="result-low">--</span>–<span id="result-high">--</span><span class="result-unit" id="result-unit">°F</span>
+            </div>
+            <p class="result-sub">Based on your conditions — shown as a range, not a single falsely precise number.</p>
+          </div>
+
+          <div class="result-grid">
+            <div class="card result-card">
+              <div class="label">Expected low</div>
+              <div class="value" id="card-expected-low">35°F</div>
+            </div>
+            <div class="card result-card">
+              <div class="label">Safety buffer applied</div>
+              <div class="value" id="card-buffer">10°F</div>
+            </div>
+            <div class="card result-card">
+              <div class="label">Pad adequacy</div>
+              <div class="value" id="card-pad-adequacy">Adequate</div>
+            </div>
+          </div>
+
+          <div class="card gauge">
+            <h3 style="margin-bottom: var(--space-2);">Safety buffer applied</h3>
+            <div class="gauge-track" id="buffer-gauge-track" role="progressbar" aria-valuemin="0" aria-valuemax="45" aria-valuenow="10" aria-label="Safety buffer applied, in degrees Fahrenheit">
+              <div class="gauge-fill" id="buffer-gauge-fill"></div>
+            </div>
+            <div class="gauge-labels"><span>0 (minimal buffer)</span><span>45°F (max buffer)</span></div>
+          </div>
+
+          <div class="card sb-breakdown-card">
+            <h3 style="margin-bottom: var(--space-3);">Which inputs changed your result</h3>
+            <ul id="breakdown-list"></ul>
+          </div>
+
+          <div class="callout callout-info">
+            <h4>Comfort vs. lower-limit vs. extreme ratings</h4>
+            <p style="margin-bottom: 0;">Manufacturer bag labels usually list three numbers. <strong>Comfort</strong> is the temperature at which an average sleeper rests comfortably all night. <strong>Lower-limit</strong> is the temperature at which an average sleeper can get through the night without severe discomfort, but may well feel cold. <strong>Extreme</strong> is a short-term survival number only — real risk of cold-related health harm at that temperature. This calculator targets the <strong>comfort</strong> rating, since that's what most campers actually want on an ordinary trip.</p>
+          </div>
+
+          <div class="callout callout-warn" id="pad-callout" hidden>
+            <h4>Your pad may be the weak link</h4>
+            <p style="margin-bottom: 0;">Your sleeping pad's R-value looks low for how cold it's expected to get — even a great bag can't make up for cold seeping up from the ground. Consider a warmer pad, or stack a piece of closed-cell foam underneath your current pad for extra insulation.</p>
+          </div>
+
+          <details class="why-vary">
+            <summary>Why this estimate may vary</summary>
+            <p>This is a planning estimate, not a lab measurement of you personally. Individual metabolism varies a great deal night to night and person to person. How much you've eaten and how hydrated you are changes how much heat your body generates. Fatigue from a hard day lowers your body's ability to keep itself warm. A bag's loft — and therefore its real-world warmth — degrades over years of use, storage, and washing, so an older bag may sleep colder than its tag suggests. Even manufacturer ratings themselves come from a standardized lab test (EN/ISO 23537, tested on a heated mannequin in controlled conditions) that predicts an average response, not your individual comfort on a specific night.</p>
+          </details>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" id="reset-btn">Reset</button>
+            <button type="button" class="btn btn-primary" id="copy-btn">Copy result</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">The math</span>
+        <h2>How this estimate is calculated</h2>
+      </div>
+      <p>The calculator starts with a baseline 10°F safety buffer — the idea that a bag rated a bit colder than the number you expect gives you margin for an off night. That buffer then grows or shrinks based on your inputs: warm sleepers get a few degrees back, cold sleepers get more buffer added. Your sleeping pad's R-value is checked against a minimum recommended for the expected low (roughly R-1.5 for temperatures at or above freezing, climbing to R-6.5 for well below zero); if your pad falls short, buffer is added at about 3°F per missing R-value point, capped at 15°F. Shelter type, clothing, humidity, and wind each add or subtract a set number of degrees based on how much heat they let escape. If you're still deciding on a shelter, our <a href="/calculators/tent-size.html">tent size calculator</a> can help you settle on the right tent before you dial in warmth. The final buffer is capped between 0 and 45°F and subtracted from your expected low to produce the recommended comfort rating, shown as a 5-degree range rather than one exact number.</p>
+      <div class="formula-box">
+        <code>recommended comfort rating = expected low − buffer</code><br>
+        <code>buffer = 10 + sleeper + pad-deficit + shelter + clothing + humidity + wind, clamped 0–45</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Read before you rely on this</span>
+        <h2>Assumptions &amp; limitations</h2>
+      </div>
+      <ul class="assumption-list">
+        <li>Assumes the overnight low you enter is accurate for your actual campsite — mountain valleys, exposed ridgelines, and elevation gain can all run colder than the nearest forecast.</li>
+        <li>Uses a simplified point system, not a full thermal physics model — real heat loss depends on dozens of interacting factors.</li>
+        <li>Targets the <strong>comfort</strong> rating specifically, not the lower-limit or extreme rating some bag tags emphasize.</li>
+        <li>Assumes your bag and pad are in good condition — a bag with compressed or aging insulation, or a leaky/underinflated pad, will sleep colder than this estimate assumes.</li>
+        <li>Doesn't account for personal metabolism, illness, medication, age, or body composition, all of which shift individual cold tolerance.</li>
+        <li>Doesn't replace the judgment of experienced campers, the manufacturer's own spec sheet, or professional cold-weather safety guidance for how to use these estimates responsibly.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Stay warm out there</span>
+        <h2>Practical recommendations</h2>
+      </div>
+      <ul>
+        <li>Buy or pack for the <strong>comfort</strong> rating, not the lower-limit or extreme number printed in bold on the hangtag — those numbers describe survival, not a good night's sleep.</li>
+        <li>A sleeping bag liner is a cheap way to add roughly 5–8°F of warmth without buying a whole new bag.</li>
+        <li>Upgrade your pad before you upgrade your bag if the ground is your main heat leak — an underinsulated pad undercuts even an excellent bag.</li>
+        <li>Skip cotton sleep layers; they hold moisture against your skin and accelerate heat loss. Dry synthetic or wool base layers perform far better.</li>
+        <li>Eat a warm, calorie-dense snack before bed and stay hydrated during the day — your body needs fuel to generate heat overnight, and running low on energy after a long day out (check our <a href="/calculators/hiking-time.html">hiking time calculator</a> when planning your itinerary) makes it harder to stay warm.</li>
+        <li>Vent your tent enough to avoid condensation build-up, which dampens insulation from the inside.</li>
+        <li>Pack your cooler thoughtfully too — food that spoils overnight means less fuel for your body the next day; our <a href="/calculators/cooler-ice.html">cooler ice calculator</a> helps you plan how much ice to bring.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">FAQ</span>
+        <h2>Common sleeping bag temperature questions</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Is a 20-degree sleeping bag warm enough at 20 degrees?</summary>
+          <p class="faq-answer">It depends on which "20 degrees" the manufacturer means. If 20°F is the bag's lower-limit rating, an average sleeper may survive the night but feel cold — not exactly a comfortable trip. If 20°F is the comfort rating, most sleepers should be fine. Run your expected low through this calculator with your actual pad, shelter, and clothing to see the buffer you'd want on top of that number.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What's the difference between comfort, lower-limit, and extreme ratings?</summary>
+          <p class="faq-answer">Comfort is the temperature at which an average sleeper rests comfortably all night. Lower-limit is the temperature at which an average sleeper can get through the night without severe discomfort, though they may feel cold. Extreme is a short-term survival number only, with real risk of cold-related harm — it's not meant to describe a comfortable night's sleep. This calculator targets the comfort rating.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Does a higher R-value pad matter more than the bag rating?</summary>
+          <p class="faq-answer">They work together, but an underinsulated pad can undercut an excellent bag, since a huge share of overnight heat loss happens through direct contact with cold ground. If your pad's R-value falls short of what's recommended for your expected low, this calculator adds extra buffer to your bag recommendation to compensate — but a warmer pad is often the more efficient fix.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Can I add a liner instead of buying a warmer bag?</summary>
+          <p class="faq-answer">A sleeping bag liner is a reasonable and inexpensive way to add roughly 5–8°F of warmth to a bag you already own, and it also keeps the bag's interior cleaner. It's not a full substitute for a genuinely inadequate bag in very cold conditions, but for a marginal gap it's often the most cost-effective option.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Why do hammock campers need an underquilt?</summary>
+          <p class="faq-answer">In a hammock, your body weight compresses the insulation underneath you, flattening its loft and letting cold air convect around your back — a sleeping bag's underside essentially stops insulating. An underquilt hangs beneath the hammock instead of being compressed by your weight, which is why hammock camping without one adds a large amount of buffer in this calculator.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What temperature rating should I buy for three-season camping?</summary>
+          <p class="faq-answer">Most three-season trips in temperate regions see overnight lows somewhere between 20°F and 45°F. Enter the coldest low you realistically expect across your planned trips (not just the average), along with your typical pad and shelter, to get a comfort-rating range that covers your normal season.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Does humidity really make that much difference in perceived cold?</summary>
+          <p class="faq-answer">Yes — damp air conducts heat away from your body faster than dry air, and condensation inside a tent or on a bag's shell can measurably reduce loft and insulating power over the course of a night. That's why this calculator adds extra buffer for moderate or damp conditions.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How much colder does wind make a campsite feel inside a tent?</summary>
+          <p class="faq-answer">Wind strips away the thin layer of warmer air that naturally clings to a tent's outer surface and can force drafts through vents and doors, increasing heat loss even when you're not directly exposed to it. An exposed, wind-battered site calls for meaningfully more buffer than a sheltered one in the trees.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Should I buy a bag rated for the coldest trip I'll ever take?</summary>
+          <p class="faq-answer">Not necessarily — a bag warm enough for occasional extreme cold is often too hot and bulky for typical trips. Many campers keep a three-season bag for most outings and add a liner, extra layers, or a dedicated winter bag only for the coldest trips they take regularly.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Do down and synthetic bags have different effective warmth?</summary>
+          <p class="faq-answer">Manufacturer temperature ratings already account for fill type, so a well-rated down bag and a well-rated synthetic bag at the same comfort rating should perform similarly when dry. The practical difference shows up in damp conditions: synthetic insulation retains more of its loft (and warmth) when wet than most down does, which is part of why this calculator adds buffer for damp conditions regardless of fill type.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How often should I replace an old sleeping bag?</summary>
+          <p class="faq-answer">There's no fixed schedule, but loft — and therefore warmth — gradually degrades with age, compression in storage, and repeated washing. If a bag that used to feel warm now leaves you cold at temperatures it once handled comfortably, that's a sign its effective rating has dropped below what the tag claims.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Does sleeping in a vehicle change what rating I need?</summary>
+          <p class="faq-answer">Yes — a vehicle typically blocks wind and some radiant heat loss better than a tent, which is why this calculator applies a small negative adjustment (less buffer needed) for vehicle shelter. It's not a large effect, though, since a vehicle's interior can still get quite cold overnight without any heat source.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Keep planning</span>
+        <h2>Related calculators</h2>
+      </div>
+      <div class="related-grid">
+        <a class="card calc-card" href="/calculators/tent-size.html">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20 L12 5 L21 20"/><path d="M9.5 20 L12 13 L14.5 20"/><path d="M3 20 H21"/></svg></div>
+          <h3>Tent Size Calculator</h3>
+          <p>Find a realistic tent capacity and floor area for your group, gear, and pets.</p>
+          <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="card calc-card" href="/calculators/hiking-time.html">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18 L9 8 L13 14 L16 9 L21 18"/></svg></div>
+          <h3>Hiking Time Calculator</h3>
+          <p>Estimate trail time from distance, elevation gain, terrain, and pace.</p>
+          <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="card calc-card" href="/calculators/cooler-ice.html">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 7 l2-3h14l2 3"/><path d="M3 12 h18"/></svg></div>
+          <h3>Cooler Ice Calculator</h3>
+          <p>Estimate how much ice keeps your cooler cold for the whole trip.</p>
+          <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <section class="card rating-widget" data-rating="sleeping-bag">
+      <h2 class="rating-title">How useful was this calculator?</h2>
+      <div class="stars" role="radiogroup" aria-label="Star rating">
+        <button type="button" class="star" data-value="1" aria-label="1 star">&#9733;</button>
+        <button type="button" class="star" data-value="2" aria-label="2 stars">&#9733;</button>
+        <button type="button" class="star" data-value="3" aria-label="3 stars">&#9733;</button>
+        <button type="button" class="star" data-value="4" aria-label="4 stars">&#9733;</button>
+        <button type="button" class="star" data-value="5" aria-label="5 stars">&#9733;</button>
+      </div>
+      <p class="rating-thanks" hidden>Thanks for your feedback!</p>
+    </section>
+  </div>
+
+</main>
+
+<footer class="site-footer contour-tile">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <a href="/index.html" class="logo" aria-label="Camp Math home">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#eef4ec"/><path d="M20 22 L26 9 L39 31 Z" fill="#cfe0cd"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+        <span>Camp<span class="logo-accent">Math</span></span>
+      </a>
+      <p class="footer-tagline">Plan smarter. Pack lighter. Camp better. Free calculators for campsite planning, comfort, fuel, and hiking.</p>
+    </div>
+    <div class="footer-col">
+      <h3>Calculators</h3>
+      <ul>
+        <li><a href="/calculators/tent-size.html">Tent Size</a></li>
+        <li><a href="/calculators/sleeping-bag.html">Sleeping Bag Temperature</a></li>
+        <li><a href="/calculators/campsite-size.html">Campsite Size</a></li>
+        <li><a href="/calculators/campfire-wood.html">Campfire Wood</a></li>
+        <li><a href="/calculators/cooler-ice.html">Cooler Ice</a></li>
+        <li><a href="/calculators/propane.html">Propane</a></li>
+        <li><a href="/calculators/hiking-time.html">Hiking Time</a></li>
+        <li><a href="/calculators/backpack-weight.html">Backpack Weight</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h3>Company</h3>
+      <ul>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="/terms-of-use.html">Terms of Use</a></li>
+        <li><a href="/disclaimer.html">Disclaimer</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <p>&copy; <span data-current-year></span> Camp Math. Estimates for planning purposes only — not professional, medical, engineering, or safety advice. See our <a href="/disclaimer.html">disclaimer</a>.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/shared.js"></script>
+<script src="/js/calculators.js"></script>
+<script src="/js/calc-sleeping-bag.js"></script>
+</body>
+</html>

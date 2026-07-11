@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Camping Propane Calculator — Estimate Usage &amp; Runtime | Camp Math</title>
+<meta name="description" content="Estimate how much propane your camp stove, lantern, heater, or RV furnace will burn. See how many 1 lb, 5 lb, 10 lb, or 20 lb cylinders you need and how long they'll last.">
+<link rel="canonical" href="https://campingmath.com/calculators/propane.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Camp Math">
+<meta property="og:title" content="Camping Propane Calculator — Estimate Usage & Runtime | Camp Math">
+<meta property="og:description" content="Add every propane appliance on your trip and get cylinders needed, total cost, and estimated runtime in seconds.">
+<meta property="og:url" content="https://campingmath.com/calculators/propane.html">
+<meta property="og:image" content="https://campingmath.com/images/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Camping Propane Calculator — Estimate Usage & Runtime | Camp Math">
+<meta name="twitter:description" content="Add every propane appliance on your trip and get cylinders needed, total cost, and estimated runtime in seconds.">
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  /* Page-specific: per-appliance breakdown table (no shared table styles exist yet). */
+  .propane-breakdown-wrap { overflow-x: auto; }
+  .propane-breakdown { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .propane-breakdown th, .propane-breakdown td { text-align: left; padding: 0.55em 0.6em; border-bottom: 1px solid var(--border); }
+  .propane-breakdown th { color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  .propane-breakdown td.num, .propane-breakdown th.num { text-align: right; }
+  .propane-breakdown tbody tr:last-child td { border-bottom: none; }
+  .propane-empty-row td { color: var(--text-muted); font-style: italic; text-align: center; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/index.html" class="logo" aria-label="Camp Math home">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#2c6339"/><path d="M20 22 L26 9 L39 31 Z" fill="#17351f"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+      <span>Camp<span class="logo-accent">Math</span></span>
+    </a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav">
+      <span class="visually-hidden">Menu</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <nav id="primary-nav" class="primary-nav" data-primary-nav aria-label="Primary">
+      <ul>
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/index.html#calculators" aria-current="page">Calculators</a></li>
+        <li><a href="/about.html">About</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="calc-hero">
+    <div class="container">
+      <p class="breadcrumbs"><a href="/index.html">Home</a> / <a href="/index.html#calculators">Calculators</a> / Propane Calculator</p>
+      <h1>Camping Propane Calculator</h1>
+      <p class="calc-intro">Add every propane appliance you'll use on your trip — stove, lantern, heater, fire pit, fridge, whatever's coming along — and see the total BTUs, pounds of propane, cylinders, and cost you should plan for. Built for tent campers, van lifers, and RVers who'd rather run the numbers once than guess and run out mid-trip.</p>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="calc-layout">
+
+      <div class="card calc-form-card">
+        <h2>Your appliances</h2>
+        <div id="appliance-rows"></div>
+        <button type="button" class="btn btn-outline btn-sm" id="add-appliance-btn">+ Add appliance</button>
+        <p class="help" id="add-appliance-help"></p>
+
+        <h2>Cylinder &amp; cost settings</h2>
+        <div class="field">
+          <label id="cylinder-type-label">Cylinder type</label>
+          <div class="segmented" id="cylinder-type-segmented" role="group" aria-labelledby="cylinder-type-label">
+            <button type="button" data-value="1" aria-pressed="false">1 lb</button>
+            <button type="button" data-value="5" aria-pressed="false">5 lb</button>
+            <button type="button" data-value="10" aria-pressed="false">10 lb</button>
+            <button type="button" data-value="20" aria-pressed="true">20 lb</button>
+            <button type="button" data-value="custom" aria-pressed="false">Custom</button>
+          </div>
+          <span class="help">Most car-camping trips use a standard 20 lb tank; small tabletop stoves and lanterns often run on 1 lb disposable bottles.</span>
+        </div>
+        <div class="field" data-field id="custom-weight-field" hidden>
+          <label for="custom-weight">Custom cylinder weight (lb)</label>
+          <input type="number" id="custom-weight" min="0.5" max="1000" step="0.5" value="20">
+          <span class="help">Enter the nominal (full) weight printed on your cylinder.</span>
+          <span class="error-msg" data-error></span>
+        </div>
+        <div class="field-row">
+          <div class="field" data-field>
+            <label for="reserve-percent">Reserve margin (%)</label>
+            <input type="number" id="reserve-percent" min="0" max="200" step="1" value="20">
+            <span class="help">Extra propane to keep as a safety margin so you don't run out mid-trip.</span>
+            <span class="error-msg" data-error></span>
+          </div>
+          <div class="field" data-field>
+            <label for="cylinder-price">Refill or cylinder price ($)</label>
+            <input type="number" id="cylinder-price" min="0" max="1000" step="1" value="25">
+            <span class="help">What one refill or exchange costs you locally.</span>
+            <span class="error-msg" data-error></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-panel">
+        <div class="card result-primary">
+          <span class="eyebrow">You'll need approximately</span>
+          <p class="result-value"><span id="result-cylinders" data-raw-value="0">0</span> <span class="result-unit" id="result-cylinder-unit">20 lb cylinders</span></p>
+          <p class="result-sub" id="result-sub">Add an appliance below to see your estimate.</p>
+        </div>
+
+        <div class="result-grid">
+          <div class="card result-card">
+            <div class="label">Total BTUs required</div>
+            <div class="value" id="result-total-btu">--</div>
+          </div>
+          <div class="card result-card">
+            <div class="label">Propane needed (lb)</div>
+            <div class="value" id="result-lb-needed">--</div>
+          </div>
+          <div class="card result-card">
+            <div class="label">Estimated cost</div>
+            <div class="value" id="result-cost">--</div>
+          </div>
+          <div class="card result-card">
+            <div class="label">Estimated runtime</div>
+            <div class="value" id="result-runtime">--</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Per-appliance breakdown</h2>
+          <div class="propane-breakdown-wrap">
+            <table class="propane-breakdown">
+              <thead>
+                <tr><th>Appliance</th><th class="num">BTU used</th><th class="num">Propane (lb)</th><th class="num">Share</th></tr>
+              </thead>
+              <tbody id="breakdown-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card callout callout-warn">
+          <h4>Never run fuel-burning appliances in enclosed spaces</h4>
+          <p>Don't use camp stoves, lanterns, fire pits, or heaters inside a tent, camper, or other enclosed space unless that exact product is explicitly designed, labeled, and approved for indoor or enclosed use. Burning propane consumes oxygen and produces carbon monoxide — an odorless gas that can be fatal. Always follow the manufacturer's ventilation instructions and keep a battery-powered CO alarm near your sleeping area whenever a fueled appliance is running.</p>
+        </div>
+
+        <div class="card callout callout-info" id="reserve-callout">
+          <h4>Your reserve margin</h4>
+          <p id="reserve-detail">Add an appliance to see how much reserve propane this adds to your plan.</p>
+        </div>
+
+        <div class="card diagram-card">
+          <h2 style="font-size:1.1rem;">Cylinder usage</h2>
+          <div class="gauge">
+            <div class="gauge-track" role="progressbar" aria-label="Percent of purchased propane you'll use" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="gauge-fill" id="gauge-fill" style="width:0%"></div>
+            </div>
+            <div class="gauge-labels"><span>0%</span><span id="gauge-percent-label">0% of purchased propane used</span><span>100%</span></div>
+          </div>
+        </div>
+
+        <details class="why-vary">
+          <summary>Why this estimate may vary</summary>
+          <p>Real BTU draw depends on burner or dial setting — most appliances rarely run at full-blast for the entire time they're switched on. Cold temperatures and high altitude reduce a cylinder's output pressure, which can lower actual burn rate versus its rated BTU. Manufacturer BTU ratings are also measured under ideal lab conditions, so real-world performance often runs a bit lower than the label suggests.</p>
+        </details>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" id="reset-btn">Reset</button>
+          <button type="button" class="btn btn-primary" id="copy-btn">Copy result</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section container prose">
+    <h2>How this estimate is calculated</h2>
+    <p>Every appliance row multiplies its BTU-per-hour rating by the hours you'll run it each day, the number of days, its duty cycle, and how many identical units you're bringing. Thermostatic appliances like a 12-volt fridge, an RV furnace, or a portable heater don't fire constantly — the duty cycle knocks their usage down to the percentage of time the burner is actually lit, not just powered on. Add every row's BTUs together, divide by a standard planning conversion of 21,600 BTU per pound of propane, then add your reserve percentage on top.</p>
+    <p>Cylinders aren't filled to their full rated weight — refillable tanks are filled to roughly 80% of nominal capacity to leave vapor space, and 1 lb disposable bottles run closer to 90% of their rated fill — so the calculator divides your total propane needed by that usable amount per cylinder, then rounds up to a whole number of cylinders. If you're planning what else to pack alongside your fuel, the <a href="/calculators/campfire-wood.html">campfire wood calculator</a> and the <a href="/calculators/cooler-ice.html">cooler ice calculator</a> use the same day-by-day planning approach.</p>
+    <div class="formula-box">
+      <p><code>rowBTU = btuPerHour &times; hoursPerDay &times; days &times; (dutyCycle / 100) &times; quantity</code></p>
+      <p><code>lbPropaneWithReserve = (totalBTU / 21600) &times; (1 + reservePercent / 100)</code></p>
+      <p><code>cylindersNeeded = ceil(lbPropaneWithReserve / (nominalCylinderLb &times; usableFraction))</code></p>
+    </div>
+  </section>
+
+  <section class="section section-alt container">
+    <h2>Assumptions &amp; limitations</h2>
+    <ul class="assumption-list">
+      <li>21,600 BTU per pound of propane is a standard planning conversion, not an exact physical constant — real yield varies slightly by blend and conditions.</li>
+      <li>Appliance BTU ratings come from manufacturer specs at full output; most real-world use is lower unless you're always running an appliance wide open.</li>
+      <li>Refillable cylinders are assumed filled to about 80% of nominal weight (vapor space safety margin); 1 lb disposable bottles are assumed filled to about 90%.</li>
+      <li>Duty cycle is an estimate — actual thermostatic cycling depends on outside temperature, insulation, and how a unit is set.</li>
+      <li>This tool doesn't account for altitude or cold-weather pressure drop, which can reduce real burn rate on any cylinder.</li>
+      <li>Costs assume a flat per-cylinder refill or exchange price and don't include taxes, deposits, or delivery fees.</li>
+    </ul>
+  </section>
+
+  <section class="section container prose">
+    <h2>Practical recommendations</h2>
+    <p>Round up, not down. If your trip could stretch a day longer than planned — weather, a late pack-up, extra guests — a 20% reserve is a reasonable starting point, and it's cheap insurance compared to a cold stove on your last morning. Bring one full spare 1 lb bottle even on a 20 lb-tank trip; it's a lightweight backup if your main cylinder runs low and you can't get to a refill station. And before you finalize how much space and how many cylinders to bring, double check your <a href="/calculators/campsite-size.html">campsite size</a> can actually fit your setup plus a safe storage spot for extra propane, away from the fire ring and out of direct sun.</p>
+  </section>
+
+  <section class="section section-alt container">
+    <h2>Frequently asked questions</h2>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>How long will a 1 lb propane bottle last?</summary>
+        <p class="faq-answer">It depends entirely on what's burning it. A single-burner backpacking stove at full output (around 10,000 BTU/hr) will empty a 1 lb bottle (about 0.9 lb usable) in roughly two hours of continuous use, but most people only run a stove for a fraction of that per meal, so one bottle often covers several days of actual cooking. A propane lantern at 2,000 BTU/hr can run nearly 10 hours on the same bottle. Enter your appliance and hours above for a number specific to your setup.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What does BTU mean and why does it matter?</summary>
+        <p class="faq-answer">BTU stands for British Thermal Unit, a measure of heat energy. An appliance's "BTU per hour" rating tells you how much heat it produces (and fuel it burns) when running at full output — a 30,000 BTU/hr stove burns roughly three times as much propane per hour as a 10,000 BTU/hr stove at the same setting. Higher BTU generally means faster cooking or more heat, but also faster fuel use.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What is duty cycle and why isn't a heater running 100% of the time?</summary>
+        <p class="faq-answer">Duty cycle is the percentage of time a thermostatically controlled appliance is actually burning fuel, versus just being switched on. A portable heater might cycle on for 6 minutes out of every 10 to hold a set temperature — that's roughly a 60% duty cycle. Appliances like camp stoves and lanterns that you manually control don't cycle this way, so they're typically modeled at 100%.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Why is a 20 lb tank not actually 20 lb of usable propane?</summary>
+        <p class="faq-answer">Propane cylinders are never filled completely full of liquid — they're filled to roughly 80% of their rated weight (about 16 lb of propane in a "20 lb" tank) so there's vapor space left for the fuel to expand safely as temperature changes. That's a manufacturing and safety standard, not underfilling by the supplier.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I use a propane heater inside my tent?</summary>
+        <p class="faq-answer">Only if that specific heater is explicitly labeled and designed for use in an enclosed space and you follow its ventilation instructions exactly. Most propane appliances — including most portable heaters, stoves, and fire pits — are designed for outdoor or well-ventilated use only. Burning propane indoors without adequate ventilation can build up carbon monoxide, an odorless gas that can be fatal, well before you'd notice a problem. When in doubt, keep it outside and bring a battery-powered CO alarm regardless.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How much propane does an RV furnace really use?</summary>
+        <p class="faq-answer">An RV furnace is usually rated around 20,000-30,000 BTU/hr, but it cycles on and off to hold a set temperature rather than running continuously — a duty cycle around 30-40% is common in mild weather, higher in a hard freeze. That's why the calculator asks for duty cycle separately from the raw BTU rating; using the raw rating alone would badly overestimate real usage.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Do I need a bigger cylinder for cold weather?</summary>
+        <p class="faq-answer">Cold weather doesn't change how much propane you need for a given amount of heat, but it can reduce a cylinder's vapor pressure and output rate, especially as a tank runs low. In freezing conditions it's worth carrying extra reserve capacity or a second cylinder so you're not relying on a near-empty tank's reduced output.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How many cylinders should I bring on a multi-day trip?</summary>
+        <p class="faq-answer">Add up every appliance you expect to use, how many hours a day, and for how many days, then let the reserve margin add a safety buffer on top. The calculator rounds the result up to a whole number of cylinders since you can't buy a fraction of one — round trips are also a good time to bring one extra small bottle as backup.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Is it cheaper to refill or exchange a propane tank?</summary>
+        <p class="faq-answer">Refilling at a local station is usually cheaper per pound than an exchange-kiosk swap, because exchange tanks are often only partially filled and you're also paying for the convenience and the tank swap itself. Enter whichever price applies to how you actually restock to get an accurate cost estimate.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What BTU rating should I use for a portable propane fire pit?</summary>
+        <p class="faq-answer">Most portable propane fire pits fall somewhere between 30,000 and 60,000 BTU/hr; check the specification plate or manual for your exact model. Fire pits are typically run at full output the whole time they're lit, so a 100% duty cycle is a reasonable default unless yours has adjustable flame control you use to turn it down.</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="section container">
+    <h2>Related calculators</h2>
+    <div class="related-grid">
+      <a class="card calc-card" href="/calculators/campfire-wood.html">
+        <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c3 4-2 5 0 9 1-1 2-2 2-4 2 2 3 5 1 8a6 6 0 0 1-10-4c0-3 3-4 3-7 1 1 2 2 2 3 1-2 1-4 2-5Z"/></svg></div>
+        <h3>Campfire Wood Calculator</h3>
+        <p>Estimate bundles, cubic feet, and cost for your nights around the fire.</p>
+        <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="card calc-card" href="/calculators/cooler-ice.html">
+        <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 7 l2-3h14l2 3"/><path d="M3 12 h18"/></svg></div>
+        <h3>Cooler Ice Calculator</h3>
+        <p>Estimate how much ice keeps your cooler cold for the whole trip.</p>
+        <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="card calc-card" href="/calculators/campsite-size.html">
+        <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 L3 6 v14 l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4 v14 M15 6 v14"/></svg></div>
+        <h3>Campsite Size Calculator</h3>
+        <p>Check whether your tent, vehicles, and canopy will actually fit the pad.</p>
+        <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </div>
+  </section>
+
+  <section class="card rating-widget" data-rating="propane">
+    <h2 class="rating-title">How useful was this calculator?</h2>
+    <div class="stars" role="radiogroup" aria-label="Star rating">
+      <button type="button" class="star" data-value="1" aria-label="1 star">&#9733;</button>
+      <button type="button" class="star" data-value="2" aria-label="2 stars">&#9733;</button>
+      <button type="button" class="star" data-value="3" aria-label="3 stars">&#9733;</button>
+      <button type="button" class="star" data-value="4" aria-label="4 stars">&#9733;</button>
+      <button type="button" class="star" data-value="5" aria-label="5 stars">&#9733;</button>
+    </div>
+    <p class="rating-thanks" hidden>Thanks for your feedback!</p>
+  </section>
+
+</main>
+
+<footer class="site-footer contour-tile">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <a href="/index.html" class="logo" aria-label="Camp Math home">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#eef4ec"/><path d="M20 22 L26 9 L39 31 Z" fill="#cfe0cd"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+        <span>Camp<span class="logo-accent">Math</span></span>
+      </a>
+      <p class="footer-tagline">Plan smarter. Pack lighter. Camp better. Free calculators for campsite planning, comfort, fuel, and hiking.</p>
+    </div>
+    <div class="footer-col">
+      <h3>Calculators</h3>
+      <ul>
+        <li><a href="/calculators/tent-size.html">Tent Size</a></li>
+        <li><a href="/calculators/sleeping-bag.html">Sleeping Bag Temperature</a></li>
+        <li><a href="/calculators/campsite-size.html">Campsite Size</a></li>
+        <li><a href="/calculators/campfire-wood.html">Campfire Wood</a></li>
+        <li><a href="/calculators/cooler-ice.html">Cooler Ice</a></li>
+        <li><a href="/calculators/propane.html">Propane</a></li>
+        <li><a href="/calculators/hiking-time.html">Hiking Time</a></li>
+        <li><a href="/calculators/backpack-weight.html">Backpack Weight</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h3>Company</h3>
+      <ul>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="/terms-of-use.html">Terms of Use</a></li>
+        <li><a href="/disclaimer.html">Disclaimer</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <p>&copy; <span data-current-year></span> Camp Math. Estimates for planning purposes only — not professional, medical, engineering, or safety advice. See our <a href="/disclaimer.html">disclaimer</a>.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/shared.js"></script>
+<script src="/js/calculators.js"></script>
+<script src="/js/calc-propane.js"></script>
+</body>
+</html>

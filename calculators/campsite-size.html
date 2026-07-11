@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Will My Tent Fit On My Campsite? Campsite Size Calculator | Camp Math</title>
+<meta name="description" content="Find out if your tent, vehicle, and canopy will fit your campsite or tent pad. Our free calculator checks clearance, orientation, and total occupied footprint.">
+<link rel="canonical" href="https://campingmath.com/calculators/campsite-size.html">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Camp Math">
+<meta property="og:title" content="Will My Tent Fit On My Campsite? Campsite Size Calculator">
+<meta property="og:description" content="Find out if your tent, vehicle, and canopy will fit your campsite or tent pad. Our free calculator checks clearance, orientation, and total occupied footprint.">
+<meta property="og:url" content="https://campingmath.com/calculators/campsite-size.html">
+<meta property="og:image" content="https://campingmath.com/images/og-image.png">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Will My Tent Fit On My Campsite? Campsite Size Calculator">
+<meta name="twitter:description" content="Find out if your tent, vehicle, and canopy will fit your campsite or tent pad. Our free calculator checks clearance, orientation, and total occupied footprint.">
+
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  /* Page-specific: warn-tone treatment for the primary result card when the
+     fit rating is "Tight fit" or "Unlikely to fit" — reuses brand tokens,
+     doesn't touch the shared stylesheet. */
+  .result-primary-warn {
+    background: linear-gradient(160deg, var(--ember-dark), var(--danger));
+  }
+  .result-primary-warn .eyebrow { color: #fbe8d8; }
+  .result-primary-warn .result-sub { color: #fbe5df; }
+
+  .campsite-diagram-wrap { width: 100%; max-width: 320px; margin-inline: auto; }
+  .campsite-diagram-svg { width: 100%; height: auto; display: block; }
+  .diagram-legend { display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: center; margin-top: var(--space-3); font-size: 0.8rem; color: var(--text-muted); }
+  .diagram-legend span { display: inline-flex; align-items: center; gap: 0.4em; }
+  .diagram-legend i { width: 0.9em; height: 0.9em; border-radius: 3px; display: inline-block; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/index.html" class="logo" aria-label="Camp Math home">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#2c6339"/><path d="M20 22 L26 9 L39 31 Z" fill="#17351f"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+      <span>Camp<span class="logo-accent">Math</span></span>
+    </a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav">
+      <span class="visually-hidden">Menu</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <nav id="primary-nav" class="primary-nav" data-primary-nav aria-label="Primary">
+      <ul>
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/index.html#calculators" aria-current="page">Calculators</a></li>
+        <li><a href="/about.html">About</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="calc-hero">
+    <div class="container">
+      <p class="breadcrumbs"><a href="/index.html">Home</a> / <a href="/index.html#calculators">Calculators</a> / Campsite Size</p>
+      <span class="eyebrow">Site &amp; shelter planning</span>
+      <h1>Campsite Size Calculator</h1>
+      <p class="calc-intro">Figure out whether your tent, vehicle, canopy, and gear are likely to fit on a specific campsite or tent pad before you arrive. Enter the pad's dimensions along with what you're bringing, and this tool checks the tent's fit in both orientations, adds your desired clearance, and estimates how crowded the site will feel.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="calc-layout">
+
+        <div class="card calc-form-card">
+          <h2>Your campsite &amp; gear</h2>
+          <p class="help" style="margin-top:-0.5em; margin-bottom: var(--space-5);">All measurements are in feet. If you have measurements in meters, convert them to feet first (1 m ≈ 3.28 ft) — this calculator doesn't include a metric toggle.</p>
+
+          <form id="campsiteForm" novalidate>
+            <fieldset>
+              <legend class="visually-hidden">Campsite / tent pad dimensions</legend>
+              <div class="field-row">
+                <div class="field" data-field>
+                  <label for="padLength">Campsite / tent-pad length (ft)</label>
+                  <input type="number" id="padLength" name="padLength" value="30" min="5" max="500" step="1" inputmode="decimal">
+                  <span class="error-msg" data-error></span>
+                </div>
+                <div class="field" data-field>
+                  <label for="padWidth">Campsite / tent-pad width (ft)</label>
+                  <input type="number" id="padWidth" name="padWidth" value="20" min="5" max="500" step="1" inputmode="decimal">
+                  <span class="error-msg" data-error></span>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend class="visually-hidden">Tent dimensions</legend>
+              <div class="field-row">
+                <div class="field" data-field>
+                  <label for="tentLength">Tent length (ft)</label>
+                  <input type="number" id="tentLength" name="tentLength" value="10" min="1" max="100" step="0.5" inputmode="decimal">
+                  <span class="error-msg" data-error></span>
+                </div>
+                <div class="field" data-field>
+                  <label for="tentWidth">Tent width (ft)</label>
+                  <input type="number" id="tentWidth" name="tentWidth" value="10" min="1" max="100" step="0.5" inputmode="decimal">
+                  <span class="error-msg" data-error></span>
+                </div>
+              </div>
+              <div class="field" data-field>
+                <label for="clearance">Desired clearance around tent (ft)</label>
+                <input type="number" id="clearance" name="clearance" value="2" min="0" max="20" step="0.5" inputmode="decimal">
+                <span class="help">Extra space on every side of the tent for stakes, guy-lines, and walking room.</span>
+                <span class="error-msg" data-error></span>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend class="visually-hidden">Vehicles</legend>
+              <div class="field" data-field>
+                <label for="numVehicles">Number of vehicles</label>
+                <input type="number" id="numVehicles" name="numVehicles" value="1" min="0" max="10" step="1" inputmode="numeric">
+                <span class="help">How many vehicles need to park at the site (not on a separate road or lot).</span>
+                <span class="error-msg" data-error></span>
+              </div>
+              <div class="field-row">
+                <div class="field" data-field>
+                  <label for="vehicleLength">Approx. vehicle length (ft)</label>
+                  <input type="number" id="vehicleLength" name="vehicleLength" value="17" min="0" max="60" step="0.5" inputmode="decimal">
+                  <span class="help">Applies per vehicle.</span>
+                  <span class="error-msg" data-error></span>
+                </div>
+                <div class="field" data-field>
+                  <label for="vehicleWidth">Approx. vehicle width (ft)</label>
+                  <input type="number" id="vehicleWidth" name="vehicleWidth" value="7" min="0" max="30" step="0.5" inputmode="decimal">
+                  <span class="error-msg" data-error></span>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend class="visually-hidden">Canopy or screen house</legend>
+              <div class="field-row">
+                <div class="field" data-field>
+                  <label for="canopyLength">Canopy / screen-house length (ft)</label>
+                  <input type="number" id="canopyLength" name="canopyLength" value="0" min="0" max="100" step="0.5" inputmode="decimal">
+                  <span class="help">Optional — leave at 0 if you're not bringing one.</span>
+                  <span class="error-msg" data-error></span>
+                </div>
+                <div class="field" data-field>
+                  <label for="canopyWidth">Canopy / screen-house width (ft)</label>
+                  <input type="number" id="canopyWidth" name="canopyWidth" value="0" min="0" max="100" step="0.5" inputmode="decimal">
+                  <span class="error-msg" data-error></span>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend class="visually-hidden">Camp kitchen / seating zone</legend>
+              <div class="field-row">
+                <div class="field" data-field>
+                  <label for="kitchenLength">Camp kitchen / seating-zone length (ft)</label>
+                  <input type="number" id="kitchenLength" name="kitchenLength" value="0" min="0" max="100" step="0.5" inputmode="decimal">
+                  <span class="help">Optional — table, chairs, camp stove area. Leave at 0 if not needed.</span>
+                  <span class="error-msg" data-error></span>
+                </div>
+                <div class="field" data-field>
+                  <label for="kitchenWidth">Camp kitchen / seating-zone width (ft)</label>
+                  <input type="number" id="kitchenWidth" name="kitchenWidth" value="0" min="0" max="100" step="0.5" inputmode="decimal">
+                  <span class="error-msg" data-error></span>
+                </div>
+              </div>
+            </fieldset>
+
+            <div class="field">
+              <label id="layoutTypeLabel">Layout type</label>
+              <div class="segmented" data-segmented id="layoutType" role="group" aria-labelledby="layoutTypeLabel">
+                <button type="button" data-value="one_pad" aria-pressed="true">Everything on one pad</button>
+                <button type="button" data-value="vehicle_separate" aria-pressed="false">Vehicle parks separately</button>
+                <button type="button" data-value="tent_pad_only" aria-pressed="false">Tent pad only</button>
+              </div>
+              <span class="help">Choose how your vehicle, canopy, and kitchen relate to the tent pad — this changes what counts as "occupying" the site.</span>
+            </div>
+          </form>
+        </div>
+
+        <div class="results-panel">
+          <div class="card result-primary">
+            <span class="eyebrow">Fit assessment</span>
+            <p class="result-value" id="fitResultValue">Comfortable fit</p>
+            <p class="result-sub" id="fitResultSub">Your tent, and everything else you're bringing, should fit with room to spare.</p>
+          </div>
+
+          <div class="callout callout-info">
+            <h4>Suggested orientation</h4>
+            <p id="orientationText">Either orientation works</p>
+          </div>
+
+          <div class="result-grid">
+            <div class="card result-card">
+              <div class="label">Total site area</div>
+              <div class="value"><span id="padAreaValue">600</span></div>
+              <div class="help">sq ft</div>
+            </div>
+            <div class="card result-card">
+              <div class="label">Total occupied footprint</div>
+              <div class="value"><span id="occupiedAreaValue">0</span></div>
+              <div class="help">sq ft</div>
+            </div>
+            <div class="card result-card">
+              <div class="label">Remaining estimated area</div>
+              <div class="value"><span id="remainingAreaValue">0</span></div>
+              <div class="help">sq ft</div>
+            </div>
+          </div>
+
+          <div class="callout callout-warn">
+            <h4>Area alone doesn't guarantee fit</h4>
+            <p>This is a planning estimate, not a guarantee. Trees, fire rings, picnic tables, slopes, parking bumpers, and campground rules aren't modeled here — the actual usable footprint of a real site is almost always smaller and more irregular than its stated dimensions.</p>
+          </div>
+
+          <div class="card diagram-card">
+            <h3>Site layout preview</h3>
+            <div class="campsite-diagram-wrap" id="diagramContainer"></div>
+            <p class="diagram-legend">
+              <span><i style="background:#3c7d49"></i> Tent + clearance</span>
+              <span><i style="background:#5f95a8"></i> Vehicle</span>
+              <span><i style="background:#dd7635"></i> Canopy</span>
+              <span><i style="background:#a67c52"></i> Kitchen</span>
+            </p>
+            <p class="help" id="vehicleSeparateNote" hidden>Your vehicle parks separately, so it isn't drawn on the pad above.</p>
+            <p class="help">Illustrative — not an exact site plan.</p>
+          </div>
+
+          <details class="why-vary">
+            <summary>Why this estimate may vary</summary>
+            <p>Real tent pads and campsites are rarely perfect rectangles, so the usable area can be smaller than length &times; width suggests. Slope, tree roots, a fixed fire ring or picnic table, and gravel-only parking rules can all eat into your effective space. Some campgrounds also require vehicles to stay entirely on a paved or gravel pad rather than the grass — check your specific site's rules before you go.</p>
+          </details>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" id="resetBtn">Reset to defaults</button>
+            <button type="button" class="btn btn-primary" id="copyBtn">Copy result</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <h2>How this estimate is calculated</h2>
+        <p>The calculator starts with your pad's total area (length &times; width), then adds your chosen clearance to every side of the tent to get its "effective" footprint. It tests whether that effective footprint fits the pad in both possible orientations — this is the key check, because a tent that's the same size as the pad on paper will not fit once clearance is added. It then adds the footprint of your vehicle(s), canopy, and kitchen zone (depending on your chosen layout type) to get a total occupied footprint, and compares that to the pad's total area to rate the fit as comfortable, tight, or unlikely.</p>
+      </div>
+      <div class="formula-box">
+        <p><code>effective tent size = tent size + (2 &times; clearance)</code> on each dimension, checked against the pad in both orientations.</p>
+        <p><code>occupied ratio = total occupied footprint &divide; pad area</code> — 60% or less is comfortable, up to 90% is tight, and above that (or a tent that doesn't fit dimensionally at all) is unlikely to fit.</p>
+      </div>
+      <p>If your numbers come back "Tight fit" or "Unlikely to fit," it's often worth rechecking the site's actual measurements with our <a href="/calculators/tent-size.html">Tent Size calculator</a> first, since getting the tent's own footprint right is the foundation of this whole estimate.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Assumptions &amp; limitations</h2>
+      </div>
+      <ul class="assumption-list">
+        <li>The pad is treated as a perfect rectangle — real tent pads are often irregular, sloped, or partly wooded.</li>
+        <li>Clearance is applied evenly on all four sides of the tent; real guy-line and vestibule space isn't always symmetrical.</li>
+        <li>Vehicle footprint uses a single approximate length and width per vehicle, applied to every vehicle you enter.</li>
+        <li>Fixed site furniture (fire rings, picnic tables, bear boxes, parking bumpers) is not subtracted from the usable area.</li>
+        <li>The diagram is a proportional sketch for planning, not a survey-accurate site plan.</li>
+        <li>Campground-specific rules (e.g., vehicles must stay on gravel, quiet hours, generator restrictions) aren't modeled — check with the campground directly.</li>
+      </ul>
+      <p>Remember these are planning tools only, not guarantees — see our <a href="/disclaimer.html">disclaimer</a> for the full picture on how to use Camp Math estimates responsibly.</p>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <h2>Practical recommendations</h2>
+      </div>
+      <ul class="assumption-list">
+        <li>Measure the actual usable, level ground at your site if you can — reserved-site listings often quote the pad's outer dimensions, not the flat, clear area inside it.</li>
+        <li>Leave at least 2 feet of clearance around your tent for stakes, guy-lines, and rainfly overhang, more in windy or rainy conditions.</li>
+        <li>If your vehicle needs to stay on a gravel or paved parking spur by campground rule, use "Vehicle parks separately" so it doesn't compete with your tent for pad space in this estimate.</li>
+        <li>Plan your camp kitchen and seating zone near the picnic table or fire ring if the site has one fixed in place, rather than assuming you can put it anywhere the math allows.</li>
+        <li>When a result comes back "Tight fit," consider a smaller tent, a different site, or dropping the canopy — small reductions in effective tent size (like less clearance) can move a site from tight to comfortable, but don't sacrifice safe guy-line clearance to do it.</li>
+        <li>If you're also planning fuel needs for the trip, our <a href="/calculators/propane.html">Propane calculator</a> can help you round out the rest of your site planning alongside this one.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Frequently asked questions</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Can a tent be larger than the campsite pad?</summary>
+          <p class="faq-answer">Yes — a tent's stated floor dimensions can exceed a small or irregular pad, especially once you add clearance for stakes and guy-lines. That's why this calculator checks the tent's footprint plus clearance against the pad in both orientations, rather than just comparing total square footage.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Why doesn't area alone tell me if my tent fits?</summary>
+          <p class="faq-answer">Two sites can have identical total square footage but very different shapes — a long, narrow pad and a square pad of the same area won't fit the same tent the same way. A 10x10 tent, for example, does not automatically fit a 10x10 pad once you add clearance on every side, even though the areas look identical on paper.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How much clearance should I leave around my tent?</summary>
+          <p class="faq-answer">Two feet on every side is a reasonable default for stakes, guy-lines, and walking room in calm weather. In windy conditions or with a large rainfly overhang, three feet or more gives you a safer margin.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Does my vehicle count as part of the campsite footprint?</summary>
+          <p class="faq-answer">It depends on your site. If your vehicle parks on the same pad as your tent and gear, select "Everything on one pad" so it's counted. If the campground has a separate parking spur or you're backing into a dedicated space, choose "Vehicle parks separately" so it doesn't compete with your tent for space in this estimate.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What if my campsite isn't a perfect rectangle?</summary>
+          <p class="faq-answer">This calculator assumes a rectangular pad because that's the simplest way to estimate fit from length and width alone. For an irregular site, measure the largest clear rectangle you can find within it and use those dimensions — the real usable area is often smaller than the site's full footprint.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What does "Tight fit" actually mean?</summary>
+          <p class="faq-answer">"Tight fit" means your tent's dimensions do fit the pad, but your total occupied footprint (tent plus vehicle, canopy, and kitchen zone, depending on your layout choice) uses more than 60% but no more than 90% of the pad's area. You can likely make it work, but there won't be much slack for extra gear, seating, or awkward-shaped obstacles.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Should I trust the campground's listed site dimensions?</summary>
+          <p class="faq-answer">Treat listed dimensions as a starting point, not a guarantee. Many campgrounds measure the platform or parking pad, not the total clear, level ground around it, and features like tree roots or drainage ditches can shrink the usable space.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Does a canopy or screen house really need its own space in the calculation?</summary>
+          <p class="faq-answer">Yes, if you'll be setting it up on the same pad as your tent. A 10x10 canopy takes up real ground and needs its own guy-line clearance too, so leaving its dimensions at 0 only makes sense if you're not bringing one or it's going somewhere else at the site.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What should I do if my result says "Unlikely to fit"?</summary>
+          <p class="faq-answer">Start by checking whether the tent's dimensions fit the pad at all in either orientation — if not, no amount of rearranging gear will help, and you may need a smaller tent or a different site. If the tent does fit but the overall footprint is too tight, try reducing clearance slightly, parking the vehicle separately, or leaving the canopy at home.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Can I use this for a group site with multiple tents?</summary>
+          <p class="faq-answer">This calculator checks one tent at a time. For a group site with multiple tents, run the calculation once per tent using a portion of the total pad area, or add up each tent's effective footprint (length plus clearance times width plus clearance) manually and compare the sum to the total site area.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Does this account for slope or drainage?</summary>
+          <p class="faq-answer">No. This tool only checks flat, rectangular dimensions. A sloped or poorly drained site can make part of its stated area unusable for sleeping comfortably, even if the math here says it fits — always walk the site and pick the flattest spot for your tent.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Is this the same as the Tent Size calculator?</summary>
+          <p class="faq-answer">No. The <a href="/calculators/tent-size.html">Tent Size calculator</a> helps you figure out what size tent you need for your group and gear. This Campsite Size calculator takes a tent (and vehicle, canopy, and kitchen) you already have and checks whether it fits a specific site's pad dimensions.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <h2>Related calculators</h2>
+      </div>
+      <div class="related-grid">
+        <a class="card calc-card" href="/calculators/tent-size.html">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20 L12 5 L21 20"/><path d="M9.5 20 L12 13 L14.5 20"/><path d="M3 20 H21"/></svg></div>
+          <h3>Tent Size</h3>
+          <p>Figure out what size tent fits your group and gear before you shop.</p>
+          <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="card calc-card" href="/calculators/campfire-wood.html">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c3 4-2 5 0 9 1-1 2-2 2-4 2 2 3 5 1 8a6 6 0 0 1-10-4c0-3 3-4 3-7 1 1 2 2 2 3 1-2 1-4 2-5Z"/></svg></div>
+          <h3>Campfire Wood</h3>
+          <p>Estimate how much firewood to bring or buy for your trip.</p>
+          <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="card calc-card" href="/calculators/propane.html">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 8V5a3 3 0 0 1 6 0v3"/><rect x="6" y="8" width="12" height="13" rx="3"/></svg></div>
+          <h3>Propane</h3>
+          <p>Work out how much propane you'll need for cooking and lanterns.</p>
+          <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="card rating-widget" data-rating="campsite-size">
+    <h2 class="rating-title">How useful was this calculator?</h2>
+    <div class="stars" role="radiogroup" aria-label="Star rating">
+      <button type="button" class="star" data-value="1" aria-label="1 star">&#9733;</button>
+      <button type="button" class="star" data-value="2" aria-label="2 stars">&#9733;</button>
+      <button type="button" class="star" data-value="3" aria-label="3 stars">&#9733;</button>
+      <button type="button" class="star" data-value="4" aria-label="4 stars">&#9733;</button>
+      <button type="button" class="star" data-value="5" aria-label="5 stars">&#9733;</button>
+    </div>
+    <p class="rating-thanks" hidden>Thanks for your feedback!</p>
+  </section>
+
+</main>
+
+<footer class="site-footer contour-tile">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <a href="/index.html" class="logo" aria-label="Camp Math home">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#eef4ec"/><path d="M20 22 L26 9 L39 31 Z" fill="#cfe0cd"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+        <span>Camp<span class="logo-accent">Math</span></span>
+      </a>
+      <p class="footer-tagline">Plan smarter. Pack lighter. Camp better. Free calculators for campsite planning, comfort, fuel, and hiking.</p>
+    </div>
+    <div class="footer-col">
+      <h3>Calculators</h3>
+      <ul>
+        <li><a href="/calculators/tent-size.html">Tent Size</a></li>
+        <li><a href="/calculators/sleeping-bag.html">Sleeping Bag Temperature</a></li>
+        <li><a href="/calculators/campsite-size.html">Campsite Size</a></li>
+        <li><a href="/calculators/campfire-wood.html">Campfire Wood</a></li>
+        <li><a href="/calculators/cooler-ice.html">Cooler Ice</a></li>
+        <li><a href="/calculators/propane.html">Propane</a></li>
+        <li><a href="/calculators/hiking-time.html">Hiking Time</a></li>
+        <li><a href="/calculators/backpack-weight.html">Backpack Weight</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h3>Company</h3>
+      <ul>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="/terms-of-use.html">Terms of Use</a></li>
+        <li><a href="/disclaimer.html">Disclaimer</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <p>&copy; <span data-current-year></span> Camp Math. Estimates for planning purposes only — not professional, medical, engineering, or safety advice. See our <a href="/disclaimer.html">disclaimer</a>.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/shared.js"></script>
+<script src="/js/calculators.js"></script>
+<script src="/js/calc-campsite-size.js"></script>
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campfire Wood Calculator — How Much Firewood Do I Need? | Camp Math</title>
+  <meta name="description" content="Estimate how many bundles, cubic feet, or logs of firewood you need for your camping trip based on nights, fire size, weather, and wood condition.">
+  <link rel="canonical" href="https://campingmath.com/calculators/campfire-wood.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Camp Math">
+  <meta property="og:title" content="Campfire Wood Calculator — How Much Firewood Do I Need?">
+  <meta property="og:description" content="Estimate how many bundles, cubic feet, or logs of firewood you need for your camping trip based on nights, fire size, weather, and wood condition.">
+  <meta property="og:url" content="https://campingmath.com/calculators/campfire-wood.html">
+  <meta property="og:image" content="https://campingmath.com/images/og-image.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Campfire Wood Calculator — How Much Firewood Do I Need?">
+  <meta name="twitter:description" content="Estimate how many bundles, cubic feet, or logs of firewood you need for your camping trip based on nights, fire size, weather, and wood condition.">
+
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Page-specific tweaks for the Campfire Wood Calculator only. */
+    .cf-section-tight { padding-top: 0; }
+    .cf-compare-grid { grid-template-columns: 1fr 1fr; }
+    .cf-compare-stat { padding: var(--space-3); }
+    .cf-compare-stat .value { font-size: 1.2rem; }
+    .cf-note { font-size: 0.85rem; color: var(--text-muted); margin-top: var(--space-3); margin-bottom: 0; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/index.html" class="logo" aria-label="Camp Math home">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#2c6339"/><path d="M20 22 L26 9 L39 31 Z" fill="#17351f"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+        <span>Camp<span class="logo-accent">Math</span></span>
+      </a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav">
+        <span class="visually-hidden">Menu</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <nav id="primary-nav" class="primary-nav" data-primary-nav aria-label="Primary">
+        <ul>
+          <li><a href="/index.html">Home</a></li>
+          <li><a href="/index.html#calculators" aria-current="page">Calculators</a></li>
+          <li><a href="/about.html">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="calc-hero container">
+      <p class="breadcrumbs"><a href="/index.html">Home</a> / <a href="/index.html#calculators">Calculators</a> / Campfire Wood</p>
+      <span class="eyebrow">Fuel &amp; fire planning</span>
+      <h1>Campfire Wood Calculator</h1>
+      <p class="calc-intro">Figure out how much firewood to bring or buy for your camping trip — in bundles, cubic feet, or approximate logs. Just tell us how many nights you're out, how long you'll keep the fire going, and the conditions, and we'll estimate what you need so you're not stuck scavenging damp branches at 9pm or hauling home three unused bundles.</p>
+    </section>
+
+    <section class="section cf-section-tight">
+      <div class="container">
+        <div class="calc-layout">
+          <!-- Form -->
+          <div class="card calc-form-card">
+            <h2>Your trip details</h2>
+            <form id="campfire-form" novalidate>
+              <div class="field-row">
+                <div class="field" data-field>
+                  <label for="nights">Number of nights</label>
+                  <input type="number" id="nights" name="nights" value="2" min="0" max="60" step="1" inputmode="numeric">
+                  <span class="error-msg" data-error></span>
+                </div>
+                <div class="field" data-field>
+                  <label for="hours">Fire duration per night (hours)</label>
+                  <input type="number" id="hours" name="hours" value="3" min="0" max="24" step="0.5" inputmode="decimal">
+                  <span class="error-msg" data-error></span>
+                </div>
+              </div>
+
+              <div class="field">
+                <span id="fire-size-legend">Desired fire size</span>
+                <div class="segmented" data-segmented="fireSize" role="group" aria-labelledby="fire-size-legend">
+                  <button type="button" data-value="small" aria-pressed="false">Small ambiance</button>
+                  <button type="button" data-value="medium" aria-pressed="true">Medium cooking-social</button>
+                  <button type="button" data-value="large" aria-pressed="false">Large (where permitted)</button>
+                </div>
+                <span class="help">"Large" fires are only appropriate where explicitly permitted by campground rules and fire conditions — see the safety note below.</span>
+              </div>
+
+              <div class="field-row">
+                <div class="field" data-field>
+                  <label for="temp">Expected outdoor temperature (°F)</label>
+                  <input type="number" id="temp" name="temp" value="55" min="-40" max="130" step="1" inputmode="numeric">
+                  <span class="help">This is a modest adjustment only — burn time and fire size drive most of the estimate, not temperature.</span>
+                  <span class="error-msg" data-error></span>
+                </div>
+                <div class="field">
+                  <span id="wind-legend">Wind</span>
+                  <div class="segmented" data-segmented="wind" role="group" aria-labelledby="wind-legend">
+                    <button type="button" data-value="calm" aria-pressed="true">Calm</button>
+                    <button type="button" data-value="breezy" aria-pressed="false">Breezy</button>
+                    <button type="button" data-value="windy" aria-pressed="false">Windy</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <span id="wood-legend">Wood condition</span>
+                <div class="segmented" data-segmented="woodCondition" role="group" aria-labelledby="wood-legend">
+                  <button type="button" data-value="seasoned" aria-pressed="true">Seasoned and dry</button>
+                  <button type="button" data-value="slightly_damp" aria-pressed="false">Slightly damp</button>
+                  <button type="button" data-value="poorly_seasoned" aria-pressed="false">Poorly seasoned</button>
+                </div>
+                <span class="help">"Seasoned" wood has dried for several months and burns efficiently — see the FAQ below for how to tell.</span>
+              </div>
+
+              <div class="field-row">
+                <div class="field" data-field>
+                  <label for="bundle-size">Average bundle size (cu ft)</label>
+                  <input type="number" id="bundle-size" name="bundleSize" value="0.75" min="0.1" max="10" step="0.05" inputmode="decimal">
+                  <span class="help">Most store-bought bundles are around 0.75–1 cu ft. Adjust if yours is labeled differently.</span>
+                  <span class="error-msg" data-error></span>
+                </div>
+                <div class="field" data-field>
+                  <label for="bundle-price">Bundle price ($)</label>
+                  <input type="number" id="bundle-price" name="bundlePrice" value="7" min="0" max="200" step="0.5" inputmode="decimal">
+                  <span class="error-msg" data-error></span>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="checkbox-row" for="cooking-fire">
+                  <input type="checkbox" id="cooking-fire" name="cookingFire">
+                  Also using the fire for cooking
+                </label>
+                <span class="help">Adds extra wood for maintaining coals or a cooking flame beyond ambiance/social use.</span>
+              </div>
+            </form>
+          </div>
+
+          <!-- Results -->
+          <div class="results-panel">
+            <div class="card result-primary">
+              <span class="eyebrow">You'll likely need</span>
+              <div class="result-value"><span data-result="bundles">0</span> <span class="result-unit">bundles</span></div>
+              <p class="result-sub" data-result="cost-sub">Estimated cost: $0</p>
+            </div>
+
+            <div class="result-grid">
+              <div class="card result-card">
+                <div class="label">Total cubic feet</div>
+                <div class="value" data-result="cuft">0.0</div>
+              </div>
+              <div class="card result-card">
+                <div class="label">Estimated cost</div>
+                <div class="value" data-result="cost">$0</div>
+              </div>
+              <div class="card result-card">
+                <div class="label">Approx. pieces/logs</div>
+                <div class="value" data-result="pieces">0</div>
+              </div>
+              <div class="card result-card">
+                <div class="label">Nights covered</div>
+                <div class="value" data-result="nights-echo">0</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="mt-0">Base vs. weather-adjusted estimate</h3>
+              <div class="result-grid cf-compare-grid">
+                <div class="result-card cf-compare-stat">
+                  <div class="label">Base estimate</div>
+                  <div class="value" data-result="base-cuft">0.0 cu ft</div>
+                </div>
+                <div class="result-card cf-compare-stat">
+                  <div class="label">Weather-adjusted</div>
+                  <div class="value" data-result="adj-cuft">0.0 cu ft</div>
+                </div>
+              </div>
+              <p class="cf-note" data-result="adjustment-note">No adjustment applied yet.</p>
+            </div>
+
+            <div class="callout callout-warn">
+              <h4>Before you light anything</h4>
+              <p>Check local burn bans and campground rules before building any fire. Keep fires within designated fire rings only. Never leave a fire unattended. Fully extinguish it — cold to the touch — before leaving the site or going to sleep. Never transport firewood across restricted areas (it spreads tree-killing pests); buy firewood locally where required. If conditions are windy, consider skipping the fire entirely regardless of this estimate.</p>
+            </div>
+
+            <div class="card diagram-card">
+              <div class="gauge" role="img" aria-label="Wood needed relative to a typical two-night trip">
+                <div class="gauge-track" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                  <div class="gauge-fill" data-gauge-fill></div>
+                </div>
+                <div class="gauge-labels">
+                  <span>Light trip</span>
+                  <span>Heavy wood use</span>
+                </div>
+              </div>
+            </div>
+
+            <details class="why-vary">
+              <summary>Why this estimate may vary</summary>
+              <p>Actual burn rate depends heavily on wood species, split size, how tightly the fire is tended, and airflow around the fire ring. Softwoods burn faster than hardwoods, tightly-tended coal beds stretch wood further than roaring flames, and a sheltered site burns less wood than an exposed, windy one. Treat this as a planning estimate, not a guarantee of exact consumption.</p>
+            </details>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-outline" data-action="reset">Reset to defaults</button>
+              <button type="button" class="btn btn-primary" data-action="copy">Copy result</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container prose">
+        <div class="section-head">
+          <h2>How this estimate is calculated</h2>
+          <p>The calculator starts from your fire size and the total hours you'll burn it across all nights — that's the main driver of how much wood you'll go through. A small ambiance fire burns roughly half a cubic foot of wood per hour, a medium cooking-and-social fire about one cubic foot per hour, and a large fire (only where explicitly permitted) around 1.75 cubic feet per hour.</p>
+          <p>From there, temperature, wind, and wood condition apply modest adjustment factors — cold nights push consumption up somewhat, windy conditions burn wood faster, and damp or poorly seasoned wood burns much less efficiently than dry, seasoned wood. We also add a small kindling allowance for relighting the fire each night, plus extra wood if you're using the fire for cooking. The result is rounded up to whole bundles, since you can't buy a fraction of one — see our <a href="/calculators/propane.html">propane calculator</a> for a similar "always round up" approach to fuel canisters.</p>
+          <p>For a deeper look at how we build every tool on this site, visit our <a href="/about.html">about page</a>.</p>
+        </div>
+        <div class="formula-box">
+          <p><strong>Base estimate</strong> (before weather/wood adjustment):<br>
+          <code>baseCuFt = sizeRate (cu ft/hr) × hours per night × nights</code></p>
+          <p><strong>Weather-adjusted estimate</strong>:<br>
+          <code>weatherAdjustedCuFt = baseCuFt × tempFactor × windFactor × woodFactor + cookingAddition + kindlingAddition</code></p>
+          <p>Bundles are then <code>ceil(weatherAdjustedCuFt / bundleSize)</code>, and pieces are estimated at roughly 0.04 cu ft per split log.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container prose">
+        <h2>Assumptions &amp; limitations</h2>
+        <ul class="assumption-list">
+          <li>Consumption rates (0.5 / 1.0 / 1.75 cu ft per hour) assume a typical mixed-hardwood campfire, not a bonfire or an all-night fire.</li>
+          <li>Temperature is treated as a modest adjustment, not the primary factor — burn time and fire size matter far more.</li>
+          <li>An average split log piece is assumed to be about 0.04 cu ft (roughly a 16-inch split); your firewood may be cut larger or smaller, which changes the piece count (not the cubic-foot total).</li>
+          <li>Bundle size and price are averages — check what your campground store or roadside stand actually sells before buying.</li>
+          <li>This tool doesn't know your local burn ban status, campground rules, or current fire danger rating — you must check those yourself before building any fire.</li>
+          <li>Wind and wood-condition factors are simplified multipliers meant for rough planning, not a precise combustion model.</li>
+        </ul>
+
+        <h2>Practical recommendations</h2>
+        <ul>
+          <li>Buy a bit more than the bare minimum — running out of wood mid-evening is far more common than having leftovers, and leftover dry wood keeps fine until your next trip.</li>
+          <li>Always buy firewood near where you'll burn it, not near where you live, to avoid moving tree pests and diseases across regions.</li>
+          <li>Split larger rounds into smaller pieces before your trip if you can — smaller, drier splits catch faster and burn more predictably, which is also gentler on your wood supply than constantly feeding oversized logs.</li>
+          <li>Pair this estimate with your <a href="/calculators/campsite-size.html">campsite size calculator</a> results so you know your fire ring will actually fit comfortably within your site's layout and setback rules.</li>
+          <li>If it's windy enough that embers could travel, skip the fire for the night — no wood estimate is worth an escaped fire.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <h2>Frequently asked questions</h2>
+        </div>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>How many bundles of firewood burn per hour?</summary>
+            <p class="faq-answer">For a medium cooking-and-social fire, expect to burn roughly one cubic foot of wood per hour, which is a little over one typical 0.75 cu ft store-bought bundle every hour. Small ambiance fires use about half that; larger fires use nearly twice as much.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Does cold weather really require a lot more wood?</summary>
+            <p class="faq-answer">Cold weather has a real but modest effect — this calculator applies up to a 25% increase for near-freezing temperatures. Fire size and how many hours you burn it matter much more than a swing of 10-20 degrees.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Why can't I bring firewood from home?</summary>
+            <p class="faq-answer">Many regions restrict or ban moving firewood across county or state lines because it can carry invasive insects and tree diseases (like emerald ash borer) that devastate local forests. When in doubt, buy firewood at or near your destination.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What counts as "seasoned" firewood?</summary>
+            <p class="faq-answer">Seasoned firewood has been cut and dried, typically for six months to a year, until its moisture content drops low enough to burn cleanly and efficiently. It's usually lighter than green wood, has visible cracks in the end grain, and sounds hollow when two pieces are knocked together, rather than a dull thud.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Is it safe to have a large fire when it's windy?</summary>
+            <p class="faq-answer">No — wind can carry embers well beyond a fire ring and turn a contained campfire into a wildfire risk very quickly. Scale down or skip the fire entirely in windy conditions, regardless of what any wood-quantity estimate suggests.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How much firewood do I need for a weekend camping trip?</summary>
+            <p class="faq-answer">For a typical two-night weekend with a medium fire running about three hours each evening, plan on roughly 6-8 cubic feet of wood, which usually works out to 8-10 standard bundles depending on conditions. Use the calculator above with your own nights and fire size for a tailored number.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Should I buy extra wood "just in case"?</summary>
+            <p class="faq-answer">A little cushion is reasonable, since running out mid-evening is more common than having leftovers. Dry firewood keeps fine in storage, so a small surplus isn't wasted — just don't transport it home across a restricted area.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Does damp wood really need 50% more?</summary>
+            <p class="faq-answer">Poorly seasoned or wet wood burns far less efficiently because energy goes into evaporating moisture instead of producing heat and flame, so yes — this calculator applies up to a 50% increase for poorly seasoned wood versus fully dry, seasoned wood.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How many logs is one bundle of firewood?</summary>
+            <p class="faq-answer">It depends on log size, but a typical 0.75 cu ft bundle of split logs (roughly 16 inches long) works out to about 18-20 pieces. This calculator's "approximate pieces" figure uses that same rough sizing.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Do I need more wood if I'm cooking over the fire?</summary>
+            <p class="faq-answer">Yes, somewhat — maintaining a bed of coals for cooking on top of a social fire uses extra fuel. Check the "using the fire for cooking" box above to add that allowance to your estimate.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What if my campground only sells wood by the "face cord" or "rick"?</summary>
+            <p class="faq-answer">Those units vary regionally, but a face cord is typically around 64-85 cubic feet of stacked wood (depending on log length). Convert your local unit to cubic feet, or adjust the "average bundle size" field to match, and the calculator will do the rest.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How do I know if there's a burn ban in effect?</summary>
+            <p class="faq-answer">Check your campground's posted rules, the managing agency's website (state park, national forest, or county), or a local fire-danger dashboard before your trip and again on arrival — burn bans can change quickly during dry spells. See our <a href="/disclaimer.html">disclaimer</a> for why this tool can't check that for you.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Related calculators</h2>
+        </div>
+        <div class="related-grid">
+          <a class="card calc-card" href="/calculators/campsite-size.html">
+            <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 L3 6 v14 l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4 v14 M15 6 v14"/></svg></div>
+            <h3>Campsite Size</h3>
+            <p>Make sure your tents, fire ring, and gear all fit comfortably within your site.</p>
+            <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </a>
+          <a class="card calc-card" href="/calculators/propane.html">
+            <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 8V5a3 3 0 0 1 6 0v3"/><rect x="6" y="8" width="12" height="13" rx="3"/></svg></div>
+            <h3>Propane</h3>
+            <p>Estimate how many propane canisters you'll need for cooking and camp stoves.</p>
+            <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </a>
+          <a class="card calc-card" href="/calculators/cooler-ice.html">
+            <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 7 l2-3h14l2 3"/><path d="M3 12 h18"/></svg></div>
+            <h3>Cooler Ice</h3>
+            <p>Figure out how much ice to pack to keep food and drinks cold all trip long.</p>
+            <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="card rating-widget" data-rating="campfire-wood">
+      <h2 class="rating-title">How useful was this calculator?</h2>
+      <div class="stars" role="radiogroup" aria-label="Star rating">
+        <button type="button" class="star" data-value="1" aria-label="1 star">&#9733;</button>
+        <button type="button" class="star" data-value="2" aria-label="2 stars">&#9733;</button>
+        <button type="button" class="star" data-value="3" aria-label="3 stars">&#9733;</button>
+        <button type="button" class="star" data-value="4" aria-label="4 stars">&#9733;</button>
+        <button type="button" class="star" data-value="5" aria-label="5 stars">&#9733;</button>
+      </div>
+      <p class="rating-thanks" hidden>Thanks for your feedback!</p>
+    </section>
+  </main>
+
+  <footer class="site-footer contour-tile">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a href="/index.html" class="logo" aria-label="Camp Math home">
+          <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#eef4ec"/><path d="M20 22 L26 9 L39 31 Z" fill="#cfe0cd"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+          <span>Camp<span class="logo-accent">Math</span></span>
+        </a>
+        <p class="footer-tagline">Plan smarter. Pack lighter. Camp better. Free calculators for campsite planning, comfort, fuel, and hiking.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Calculators</h3>
+        <ul>
+          <li><a href="/calculators/tent-size.html">Tent Size</a></li>
+          <li><a href="/calculators/sleeping-bag.html">Sleeping Bag Temperature</a></li>
+          <li><a href="/calculators/campsite-size.html">Campsite Size</a></li>
+          <li><a href="/calculators/campfire-wood.html">Campfire Wood</a></li>
+          <li><a href="/calculators/cooler-ice.html">Cooler Ice</a></li>
+          <li><a href="/calculators/propane.html">Propane</a></li>
+          <li><a href="/calculators/hiking-time.html">Hiking Time</a></li>
+          <li><a href="/calculators/backpack-weight.html">Backpack Weight</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="/terms-of-use.html">Terms of Use</a></li>
+          <li><a href="/disclaimer.html">Disclaimer</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; <span data-current-year></span> Camp Math. Estimates for planning purposes only — not professional, medical, engineering, or safety advice. See our <a href="/disclaimer.html">disclaimer</a>.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/shared.js"></script>
+  <script src="/js/calculators.js"></script>
+  <script src="/js/calc-campfire-wood.js"></script>
+</body>
+</html>

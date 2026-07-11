@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hiking Time Calculator — Estimate Trail Time with Elevation Gain | Camp Math</title>
+<meta name="description" content="Estimate how long a hike will take from distance, elevation gain, terrain, pack weight, and pace — a realistic time range, plus a turnaround-time planner.">
+<link rel="canonical" href="https://campingmath.com/calculators/hiking-time.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Camp Math">
+<meta property="og:title" content="Hiking Time Calculator — Estimate Trail Time with Elevation Gain">
+<meta property="og:description" content="Estimate how long a hike will take from distance, elevation gain, terrain, pack weight, and pace — a realistic time range, plus a turnaround-time planner.">
+<meta property="og:url" content="https://campingmath.com/calculators/hiking-time.html">
+<meta property="og:image" content="https://campingmath.com/images/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hiking Time Calculator — Estimate Trail Time with Elevation Gain">
+<meta name="twitter:description" content="Estimate how long a hike will take from distance, elevation gain, terrain, pack weight, and pace — a realistic time range, plus a turnaround-time planner.">
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  /* Page-specific tweaks for the Hiking Time Calculator only. */
+  .ht-hero-icon { display: inline-flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2); }
+  .ht-breakdown-row {
+    display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3);
+    padding: 0.45em 0; border-bottom: 1px dashed var(--border); font-size: 0.92rem;
+  }
+  .ht-breakdown-row:last-child { border-bottom: none; }
+  .ht-breakdown-row span:first-child { color: var(--text-muted); }
+  .ht-diagram-note, .ht-small-note { font-size: 0.85rem; color: var(--text-muted); margin-top: var(--space-2); margin-bottom: 0; }
+  .ht-turnaround-line { margin: 0 0 var(--space-2); }
+  .ht-turnaround-line:last-child { margin-bottom: 0; }
+  .ht-elev-unit-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/index.html" class="logo" aria-label="Camp Math home">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#2c6339"/><path d="M20 22 L26 9 L39 31 Z" fill="#17351f"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+      <span>Camp<span class="logo-accent">Math</span></span>
+    </a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav">
+      <span class="visually-hidden">Menu</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <nav id="primary-nav" class="primary-nav" data-primary-nav aria-label="Primary">
+      <ul>
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/index.html#calculators" aria-current="page">Calculators</a></li>
+        <li><a href="/about.html">About</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="calc-hero">
+    <div class="container">
+      <p class="breadcrumbs"><a href="/index.html">Home</a> / <a href="/index.html#calculators">Calculators</a> / Hiking Time</p>
+      <span class="eyebrow">Hiking &amp; Trail Planning</span>
+      <div class="ht-hero-icon">
+        <div class="icon-badge" style="background: var(--forest-100); color: var(--forest-700);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18 L9 8 L13 14 L16 9 L21 18"/></svg>
+        </div>
+        <h1 class="mt-0">Hiking Time Calculator</h1>
+      </div>
+      <p class="calc-intro">Estimate how long a hike will actually take using distance, elevation gain and loss, terrain, your pack weight, fitness, and planned breaks. This tool uses a Naismith-style rule of thumb, transparently adjusted, and gives you a realistic time range rather than one falsely precise number — plus an optional turnaround-time planner if you tell it your sunset time.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="calc-layout">
+
+        <div class="card calc-form-card">
+          <h2>Your hike details</h2>
+          <form id="hiking-time-form">
+
+            <div class="field" data-field>
+              <label for="ht-distance">Trail distance</label>
+              <div class="field-row">
+                <input type="number" id="ht-distance" name="distance" min="0" max="100" step="0.1" value="6" inputmode="decimal">
+                <div class="unit-toggle" data-unit-toggle="distance" role="group" aria-label="Distance unit">
+                  <button type="button" data-value="mi" aria-pressed="true">Miles</button>
+                  <button type="button" data-value="km" aria-pressed="false">Kilometers</button>
+                </div>
+              </div>
+              <span class="help">Use your total planned distance — round-trip for an out-and-back hike.</span>
+              <span class="error-msg" data-error></span>
+            </div>
+
+            <div class="field">
+              <div class="ht-elev-unit-row">
+                <span id="ht-elev-unit-legend">Elevation unit</span>
+                <div class="unit-toggle" data-unit-toggle="elevation" role="group" aria-labelledby="ht-elev-unit-legend">
+                  <button type="button" data-value="ft" aria-pressed="true">Feet</button>
+                  <button type="button" data-value="m" aria-pressed="false">Meters</button>
+                </div>
+              </div>
+              <span class="help">Applies to both elevation gain and elevation loss below.</span>
+            </div>
+
+            <div class="field-row">
+              <div class="field" data-field>
+                <label for="ht-elev-gain">Elevation gain</label>
+                <input type="number" id="ht-elev-gain" name="elevGain" min="0" max="30000" step="10" value="1200" inputmode="decimal">
+                <span class="error-msg" data-error></span>
+              </div>
+              <div class="field" data-field>
+                <label for="ht-elev-loss">Elevation loss</label>
+                <input type="number" id="ht-elev-loss" name="elevLoss" min="0" max="30000" step="10" value="1200" inputmode="decimal">
+                <span class="help">Often close to your gain on an out-and-back hike.</span>
+                <span class="error-msg" data-error></span>
+              </div>
+            </div>
+
+            <fieldset class="field">
+              <legend>Terrain</legend>
+              <span class="help">Smooth = graded path or boardwalk; Very rugged = scrambling, loose rock, heavy roots.</span>
+              <div class="segmented" data-segmented="terrain" role="group" aria-label="Terrain type">
+                <button type="button" data-value="smooth" aria-pressed="false">Smooth</button>
+                <button type="button" data-value="moderate" aria-pressed="true">Moderate</button>
+                <button type="button" data-value="rocky_rooted" aria-pressed="false">Rocky/rooted</button>
+                <button type="button" data-value="very_rugged" aria-pressed="false">Very rugged</button>
+              </div>
+            </fieldset>
+
+            <fieldset class="field">
+              <legend>Fitness / pace</legend>
+              <span class="help">Be honest about your typical trail pace, not your best-day pace.</span>
+              <div class="segmented" data-segmented="fitness" role="group" aria-label="Fitness and pace">
+                <button type="button" data-value="relaxed" aria-pressed="false">Relaxed</button>
+                <button type="button" data-value="average" aria-pressed="true">Average</button>
+                <button type="button" data-value="strong" aria-pressed="false">Strong</button>
+                <button type="button" data-value="very_fast" aria-pressed="false">Very fast</button>
+              </div>
+            </fieldset>
+
+            <div class="field" data-field>
+              <label for="ht-pack-weight">Pack weight</label>
+              <div class="field-row">
+                <input type="number" id="ht-pack-weight" name="packWeight" min="0" max="400" step="1" value="25" inputmode="decimal">
+                <div class="unit-toggle" data-unit-toggle="weight" role="group" aria-label="Pack weight unit">
+                  <button type="button" data-value="lb" aria-pressed="true">lb</button>
+                  <button type="button" data-value="kg" aria-pressed="false">kg</button>
+                </div>
+              </div>
+              <span class="help">A heavier pack slows you down — this estimate ramps up gradually above about 15 lb.</span>
+              <span class="error-msg" data-error></span>
+            </div>
+
+            <fieldset class="field">
+              <legend>Trail altitude</legend>
+              <span class="help">Rough elevation bands: Low is under 5,000 ft, Moderate is 5,000–9,000 ft, High is above 9,000 ft.</span>
+              <div class="segmented" data-segmented="altitude" role="group" aria-label="Trail altitude">
+                <button type="button" data-value="low" aria-pressed="true">Low elevation</button>
+                <button type="button" data-value="moderate" aria-pressed="false">Moderate altitude</button>
+                <button type="button" data-value="high" aria-pressed="false">High altitude</button>
+              </div>
+            </fieldset>
+
+            <div class="field" data-field>
+              <label for="ht-break-minutes">Planned break time (minutes)</label>
+              <input type="number" id="ht-break-minutes" name="breakMinutes" min="0" max="600" step="5" value="30" inputmode="numeric">
+              <span class="help">Lunch, snack stops, photos — total minutes spent stopped, not moving.</span>
+              <span class="error-msg" data-error></span>
+            </div>
+
+            <div class="field">
+              <label>Group</label>
+              <div class="stack" style="gap: 0.5rem;">
+                <label class="checkbox-row" for="ht-adult-group"><input type="checkbox" id="ht-adult-group" name="adultGroup"> Hiking with a group of adults</label>
+                <label class="checkbox-row" for="ht-children"><input type="checkbox" id="ht-children" name="children"> Children present</label>
+                <label class="checkbox-row" for="ht-dog"><input type="checkbox" id="ht-dog" name="dog"> Dog along</label>
+              </div>
+              <span class="help">Leave all unchecked for a solo hike at your own pace. These aren't exclusive — check as many as apply.</span>
+            </div>
+
+            <div class="field" data-field>
+              <label for="ht-daylight-buffer">Daylight safety buffer (minutes)</label>
+              <input type="number" id="ht-daylight-buffer" name="daylightBuffer" min="0" max="300" step="5" value="60" inputmode="numeric">
+              <span class="help">Extra safety margin you want to be back before sunset, on top of the hike itself.</span>
+              <span class="error-msg" data-error></span>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="ht-sunset-time">Sunset time (optional)</label>
+                <input type="time" id="ht-sunset-time" name="sunsetTime">
+                <span class="help">Add this to get a suggested turnaround time and start time.</span>
+              </div>
+              <div class="field">
+                <label for="ht-start-time">Planned start time (optional)</label>
+                <input type="time" id="ht-start-time" name="startTime">
+                <span class="help">If you already know your start time, we'll use it to fine-tune your turnaround.</span>
+              </div>
+            </div>
+
+          </form>
+        </div>
+
+        <div class="results-panel">
+
+          <div class="card result-primary">
+            <span class="eyebrow">Estimated total trail time</span>
+            <p class="result-value"><span id="ht-low-value" data-raw-value="0">0.0</span>&#8211;<span id="ht-high-value" data-raw-value="0">0.0</span><span class="result-unit"> hours</span></p>
+            <p class="result-sub" id="ht-range-sub">Moving time plus breaks, shown as a range rather than one exact number.</p>
+          </div>
+
+          <div class="result-grid">
+            <div class="card result-card">
+              <div class="label">Moving time</div>
+              <div class="value"><span id="ht-moving-time">0.0</span> hr</div>
+            </div>
+            <div class="card result-card">
+              <div class="label">Break time</div>
+              <div class="value"><span id="ht-break-time">0.0</span> hr</div>
+            </div>
+            <div class="card result-card">
+              <div class="label">Pace estimate</div>
+              <div class="value"><span id="ht-pace">0.0</span> <span id="ht-pace-unit">mph</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="mt-0">What's driving your time</h3>
+            <div class="ht-breakdown-row"><span>From distance</span><strong><span id="ht-from-distance">0.0</span> hr</strong></div>
+            <div class="ht-breakdown-row"><span>From elevation gain/loss</span><strong><span id="ht-from-elevation">0.0</span> hr</strong></div>
+          </div>
+
+          <div class="callout callout-info" id="ht-turnaround-card">
+            <h4>Turnaround &amp; start-time planning</h4>
+            <p class="ht-small-note" id="ht-turnaround-empty">Add a sunset time above to get a suggested turnaround time and recommended start time.</p>
+            <div id="ht-turnaround-results" hidden>
+              <p class="ht-turnaround-line"><strong>Suggested turnaround time:</strong> <span id="ht-turnaround-time">&#8212;</span></p>
+              <p class="ht-turnaround-line"><strong>Recommended start time:</strong> <span id="ht-start-suggestion">&#8212;</span></p>
+              <p class="ht-small-note" id="ht-turnaround-caveat">Rough planning aid only — it assumes your return trip takes about as long as your outbound trip, which may not hold if the elevation profile reverses substantially (e.g. climbing most of the way out).</p>
+            </div>
+          </div>
+
+          <div class="callout callout-warn">
+            <h4>This is a moving-time estimate, not a guarantee</h4>
+            <p>Weather, navigation mistakes, river crossings, injury, heat, altitude, and darkness can all substantially change how long a hike actually takes. Always carry navigation tools you know how to use, tell someone your planned route and expected return time, and build in a safety margin beyond this estimate.</p>
+          </div>
+
+          <div class="card diagram-card">
+            <svg class="trail-progress" viewBox="0 0 320 120" width="320" height="120" role="img" aria-labelledby="ht-diagram-title">
+              <title id="ht-diagram-title">Illustrative trail-progress diagram showing roughly where your estimated total trail time falls on a 0-12 hour scale</title>
+              <path class="trail-line" d="M20,90 C90,20 140,110 300,30" fill="none" stroke="var(--border)" stroke-width="4" stroke-linecap="round"></path>
+              <path class="trail-fill" id="ht-trail-fill" d="M20,90 C90,20 140,110 300,30" fill="none" stroke="var(--forest-500)" stroke-width="4" stroke-linecap="round"></path>
+              <circle cx="20" cy="90" r="6" fill="var(--forest-800)"></circle>
+              <circle id="ht-hiker" class="hiker" r="7" fill="#fff" stroke="var(--forest-800)" stroke-width="2"></circle>
+              <circle cx="300" cy="30" r="6" fill="var(--ember)"></circle>
+              <text x="10" y="108" font-size="11" fill="var(--text-muted)">Trailhead</text>
+              <text x="250" y="18" font-size="11" fill="var(--text-muted)">Destination</text>
+            </svg>
+            <p class="ht-diagram-note">Illustrative only — the marker shows roughly where your total estimated trail time falls on a 0&ndash;12 hour scale, not a live position on the trail.</p>
+          </div>
+
+          <details class="why-vary">
+            <summary>Why this estimate may vary</summary>
+            <p>Trail conditions can differ day to day (mud, snow, blowdown, recent trail work), a group's real pace is usually set by its slowest member rather than an average, snack and photo stops beyond your planned break time add up fast, and your actual fitness on trip day may not match the pace category you selected. Treat this as a planning range, not a stopwatch.</p>
+          </details>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" id="ht-reset">Reset</button>
+            <button type="button" class="btn btn-primary" id="ht-copy">Copy result</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container prose">
+      <h2>How this estimate is calculated</h2>
+      <p>This calculator starts with a Naismith-style rule of thumb: base moving time is your distance divided by a pace that matches your chosen fitness level (2&ndash;3.5 mph), plus roughly 30 minutes of extra time for every 1,000 ft of elevation gain and a smaller addition for elevation loss. That combined time is then scaled up for terrain difficulty, trail altitude, and group composition (hiking with children or a dog typically slows a group down more than an extra adult does). Pack weight adds its own gradual penalty &mdash; little to no slowdown under about 15 lb, ramping up to roughly 35% slower at 75+ lb &mdash; so if you're unsure how heavy your load really is, our <a href="/calculators/backpack-weight.html">Backpack Weight Calculator</a> can help you sanity-check it before you head out. Break time is added on top of moving time, and the whole total is presented as a range (90% to 115% of the calculated total) because delays are far more common on trail than finishing early.</p>
+
+      <h2>Assumptions &amp; limitations</h2>
+      <ul class="assumption-list">
+        <li>Pace categories (relaxed, average, strong, very fast) are rough bands, not a precise measurement of your fitness.</li>
+        <li>The elevation-gain and elevation-loss additions are simplified averages &mdash; very steep or very gradual grades can add or subtract this much.</li>
+        <li>Terrain, altitude, pack weight, and group multipliers are estimates based on common trip-report patterns, not a scientific model.</li>
+        <li>This tool does not know your specific trail's conditions, weather forecast, water crossings, or route-finding difficulty.</li>
+        <li>Turnaround and start-time suggestions assume a similar-paced return trip, which is often, but not always, a fair assumption.</li>
+        <li>This is a planning estimate only &mdash; see our full <a href="/disclaimer.html">disclaimer</a> for what this tool is and isn't meant to do.</li>
+      </ul>
+
+      <h2>Practical recommendations</h2>
+      <p>Plan around the high end of your estimated range, not the low end, especially for hikes with real elevation gain, an unfamiliar trail, or a group that includes kids or a dog. Always tell someone your route and expected return time before you go, carry a paper map or offline GPS track as backup, and pack a headlamp even for day hikes that "shouldn't" run into darkness &mdash; turnaround times are a guide, not a guarantee. If your day hike might stretch into an overnight because of a late start or slower-than-expected pace, our <a href="/calculators/sleeping-bag.html">Sleeping Bag Temperature Calculator</a> can help you figure out if you're carrying enough warmth just in case.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Frequently asked questions</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>How does elevation gain affect hiking time?</summary>
+          <p class="faq-answer">Climbing is much slower than walking on flat ground. This calculator adds roughly 30 minutes of extra time for every 1,000 ft of elevation gain (and a smaller amount for elevation loss), on top of your base distance time &mdash; so two hikes of the same length can take very different amounts of time depending on how much climbing is involved.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What is Naismith's rule?</summary>
+          <p class="faq-answer">Naismith's rule is a classic mountaineering rule of thumb from the 1890s: allow about one hour for every 3 miles (5 km) of distance, plus extra time for climbing. This calculator uses that same basic idea but adjusts pace, terrain, pack weight, altitude, and group composition transparently rather than using a single fixed rate.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Does pack weight really slow you down that much?</summary>
+          <p class="faq-answer">Yes, especially past a certain point. This calculator applies little to no slowdown for a light daypack (under about 15 lb), then ramps up gradually to roughly 35% slower moving time at 75+ lb, which matches how noticeably a heavy overnight or multi-day pack can affect pace on trail.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How much should I add for altitude?</summary>
+          <p class="faq-answer">This calculator adds about 8% more time at moderate altitude (roughly 5,000&ndash;9,000 ft) and about 20% more time at high altitude (above roughly 9,000 ft), since thinner air makes sustained effort harder even for fit, acclimatized hikers. If you're not acclimatized, actual slowdowns can be larger than this estimate.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What's a safe turnaround time strategy?</summary>
+          <p class="faq-answer">A common rule is to pick a firm turnaround time before you start, based on your slowest planned pace and a comfortable daylight buffer, and stick to it regardless of how far you've gotten &mdash; not just once you "feel tired." This calculator's turnaround suggestion assumes your return leg takes about as long as your outbound leg, so build in extra margin if your route climbs more on the way out than on the way back.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Should I enter one-way or round-trip distance?</summary>
+          <p class="faq-answer">Enter whatever distance you'll actually be moving for that trip. For an out-and-back hike, use the full round-trip mileage and round-trip elevation gain/loss; for a point-to-point or one-way hike, use just the one-way numbers.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How accurate is this hiking time calculator?</summary>
+          <p class="faq-answer">It's a planning estimate based on a widely used rule of thumb, not a measurement of your specific trail or fitness on the day. Use the range it gives you as a starting point, and adjust based on your own past experience on similar trails.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Why is my estimate shown as a range instead of one number?</summary>
+          <p class="faq-answer">Because a single number would be falsely precise. Real hikes are affected by too many variables &mdash; weather, footing, how you're feeling that day &mdash; to pin down to the minute, and delays are more common than finishing early, so the range is intentionally wider on the high end.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How much does hiking with kids change the estimate?</summary>
+          <p class="faq-answer">This calculator applies a larger slowdown for children present than for an extra adult or a dog, since young kids typically set a much slower group pace, need more frequent stops, and can tire unevenly through the day. Build in extra break time on top of this estimate for family hikes.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Does elevation loss slow you down too?</summary>
+          <p class="faq-answer">Yes, though less than elevation gain. Steep descents are easier aerobically but harder on knees, ankles, and footing, especially with a loaded pack, so this calculator adds a smaller (but nonzero) time penalty for elevation loss on top of elevation gain.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What if part of my hike has no cell service?</summary>
+          <p class="faq-answer">Plan as if it doesn't, even if you expect some bars &mdash; carry a paper map or downloaded offline GPS track, and don't rely on this calculator (or your phone) as your only source of timing or location information once you're on trail.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How do I use the sunset and turnaround-time fields?</summary>
+          <p class="faq-answer">Enter your local sunset time and, if you know it, your planned start time. The calculator subtracts your daylight safety buffer from sunset to find your latest safe return time, then works backward to suggest a turnaround time and a recommended start time &mdash; treat both as a rough guide, not a guarantee.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <h2>Related calculators</h2>
+      </div>
+      <div class="related-grid">
+        <a class="card calc-card" href="/calculators/backpack-weight.html">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 8V6a4 4 0 0 1 8 0v2"/><rect x="5" y="8" width="14" height="13" rx="3"/></svg></div>
+          <h3>Backpack Weight Calculator</h3>
+          <p>Estimate a sane pack-weight range as a share of your body weight.</p>
+          <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="card calc-card" href="/calculators/sleeping-bag.html">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="6" rx="3"/><path d="M7 9 v9a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3V9"/><path d="M7 13 h10 M7 17 h10"/></svg></div>
+          <h3>Sleeping Bag Temperature Calculator</h3>
+          <p>Get a recommended comfort rating based on conditions and your sleep setup.</p>
+          <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="card calc-card" href="/calculators/tent-size.html">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20 L12 5 L21 20"/><path d="M9.5 20 L12 13 L14.5 20"/><path d="M3 20 H21"/></svg></div>
+          <h3>Tent Size Calculator</h3>
+          <p>Find out what size tent you actually need if your hike becomes a basecamp trip.</p>
+          <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="card rating-widget" data-rating="hiking-time">
+    <h2 class="rating-title">How useful was this calculator?</h2>
+    <div class="stars" role="radiogroup" aria-label="Star rating">
+      <button type="button" class="star" data-value="1" aria-label="1 star">&#9733;</button>
+      <button type="button" class="star" data-value="2" aria-label="2 stars">&#9733;</button>
+      <button type="button" class="star" data-value="3" aria-label="3 stars">&#9733;</button>
+      <button type="button" class="star" data-value="4" aria-label="4 stars">&#9733;</button>
+      <button type="button" class="star" data-value="5" aria-label="5 stars">&#9733;</button>
+    </div>
+    <p class="rating-thanks" hidden>Thanks for your feedback!</p>
+  </section>
+
+</main>
+
+<footer class="site-footer contour-tile">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <a href="/index.html" class="logo" aria-label="Camp Math home">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#eef4ec"/><path d="M20 22 L26 9 L39 31 Z" fill="#cfe0cd"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+        <span>Camp<span class="logo-accent">Math</span></span>
+      </a>
+      <p class="footer-tagline">Plan smarter. Pack lighter. Camp better. Free calculators for campsite planning, comfort, fuel, and hiking.</p>
+    </div>
+    <div class="footer-col">
+      <h3>Calculators</h3>
+      <ul>
+        <li><a href="/calculators/tent-size.html">Tent Size</a></li>
+        <li><a href="/calculators/sleeping-bag.html">Sleeping Bag Temperature</a></li>
+        <li><a href="/calculators/campsite-size.html">Campsite Size</a></li>
+        <li><a href="/calculators/campfire-wood.html">Campfire Wood</a></li>
+        <li><a href="/calculators/cooler-ice.html">Cooler Ice</a></li>
+        <li><a href="/calculators/propane.html">Propane</a></li>
+        <li><a href="/calculators/hiking-time.html">Hiking Time</a></li>
+        <li><a href="/calculators/backpack-weight.html">Backpack Weight</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h3>Company</h3>
+      <ul>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="/terms-of-use.html">Terms of Use</a></li>
+        <li><a href="/disclaimer.html">Disclaimer</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <p>&copy; <span data-current-year></span> Camp Math. Estimates for planning purposes only — not professional, medical, engineering, or safety advice. See our <a href="/disclaimer.html">disclaimer</a>.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/shared.js"></script>
+<script src="/js/calculators.js"></script>
+<script src="/js/calc-hiking-time.js"></script>
+</body>
+</html>

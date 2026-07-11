@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cooler Ice Calculator — How Much Ice Do I Need Camping? | Camp Math</title>
+  <meta name="description" content="Figure out how much ice you need for your cooler while camping, based on trip length, temperature, cooler quality, and how often you'll open the lid.">
+  <link rel="canonical" href="https://campingmath.com/calculators/cooler-ice.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Camp Math">
+  <meta property="og:title" content="Cooler Ice Calculator — How Much Ice Do I Need Camping?">
+  <meta property="og:description" content="Figure out how much ice you need for your cooler while camping, based on trip length, temperature, cooler quality, and how often you'll open the lid.">
+  <meta property="og:url" content="https://campingmath.com/calculators/cooler-ice.html">
+  <meta property="og:image" content="https://campingmath.com/images/og-image.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cooler Ice Calculator — How Much Ice Do I Need Camping?">
+  <meta name="twitter:description" content="Figure out how much ice you need for your cooler while camping, based on trip length, temperature, cooler quality, and how often you'll open the lid.">
+
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Cooler Ice page-specific tweak: visually de-emphasize the primary pounds
+       number when an electric cooler is selected, since the copy already says
+       little to no ice is needed. Scoped to this page only. */
+    .cooler-ice-page .result-primary.is-electric .result-value { opacity: 0.55; font-size: clamp(1.5rem, 3.4vw, 2.1rem); }
+    .cooler-ice-page .result-card .value.is-text { font-size: 0.95rem; font-weight: 600; line-height: 1.4; }
+  </style>
+</head>
+<body class="cooler-ice-page">
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/index.html" class="logo" aria-label="Camp Math home">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#2c6339"/><path d="M20 22 L26 9 L39 31 Z" fill="#17351f"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+        <span>Camp<span class="logo-accent">Math</span></span>
+      </a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav">
+        <span class="visually-hidden">Menu</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <nav id="primary-nav" class="primary-nav" data-primary-nav aria-label="Primary">
+        <ul>
+          <li><a href="/index.html">Home</a></li>
+          <li><a href="/index.html#calculators" aria-current="page">Calculators</a></li>
+          <li><a href="/about.html">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="calc-hero">
+      <div class="container">
+        <p class="breadcrumbs"><a href="/index.html">Home</a> / <a href="/index.html#calculators">Calculators</a> / Cooler Ice</p>
+        <div class="icon-badge" style="background: var(--sky-tint); color: var(--sky-dark); margin-bottom: var(--space-3);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 7 l2-3h14l2 3"/><path d="M3 12 h18"/></svg>
+        </div>
+        <span class="eyebrow">Camp Kitchen</span>
+        <h1>Cooler Ice Calculator</h1>
+        <p class="calc-intro">Wondering how much ice to buy before a camping trip? This tool estimates pounds of ice based on your trip length, cooler quality, outdoor temperature, and how you'll use it — so you can buy enough without hauling melted water home. It's a planning estimate, not a food-safety guarantee.</p>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="calc-layout">
+        <div class="card calc-form-card">
+          <h2>Trip &amp; cooler details</h2>
+          <form data-cooler-ice-form>
+
+            <div class="field">
+              <label for="days">Trip length (days)</label>
+              <input type="number" id="days" name="days" value="3" min="1" max="60" step="1">
+              <span class="help">How many days you need the cooler to stay cold.</span>
+              <span class="error-msg" data-error></span>
+            </div>
+
+            <div class="field">
+              <label for="capacity">Cooler capacity</label>
+              <div class="unit-toggle" data-unit-toggle>
+                <button type="button" data-value="qt" aria-pressed="true">Quarts</button>
+                <button type="button" data-value="l" aria-pressed="false">Liters</button>
+              </div>
+              <input type="number" id="capacity" name="capacity" value="48" min="1" max="400" step="1" style="margin-top: var(--space-3);">
+              <span class="help">Check the size printed on your cooler, or estimate — a typical car-camping cooler is 40–65 quarts.</span>
+              <span class="error-msg" data-error></span>
+            </div>
+
+            <div class="field">
+              <label for="tempF">Outdoor daytime temperature (°F)</label>
+              <input type="number" id="tempF" name="tempF" value="80" min="-20" max="130" step="1">
+              <span class="help">The typical daytime high where you'll be camping — heat is the biggest driver of ice melt.</span>
+              <span class="error-msg" data-error></span>
+            </div>
+
+            <fieldset class="field">
+              <legend>Cooler type</legend>
+              <div class="segmented" data-segmented="coolerType">
+                <button type="button" data-value="basic" aria-pressed="false">Basic</button>
+                <button type="button" data-value="mid_range" aria-pressed="true">Mid-range</button>
+                <button type="button" data-value="high_performance" aria-pressed="false">High-performance</button>
+                <button type="button" data-value="electric" aria-pressed="false">Electric</button>
+              </div>
+              <span class="help">"High-performance rotomolded" coolers (thick-walled, one-piece molded shells like Yeti/RTIC-style) hold cold much longer than a basic drugstore cooler. Electric coolers plug in and actively refrigerate.</span>
+            </fieldset>
+
+            <fieldset class="field">
+              <legend>What's mostly inside</legend>
+              <div class="segmented" data-segmented="purpose">
+                <button type="button" data-value="food_only" aria-pressed="false">Food only</button>
+                <button type="button" data-value="drinks_only" aria-pressed="false">Drinks only</button>
+                <button type="button" data-value="mixed" aria-pressed="true">Mixed</button>
+              </div>
+              <span class="help">Drink cans and bottles cool a little faster than loosely packed food.</span>
+            </fieldset>
+
+            <fieldset class="field">
+              <legend>Starting temperature of contents</legend>
+              <div class="segmented" data-segmented="startingTemp">
+                <button type="button" data-value="pre_chilled" aria-pressed="true">Pre-chilled</button>
+                <button type="button" data-value="some_chilled" aria-pressed="false">Some chilled</button>
+                <button type="button" data-value="room_temp" aria-pressed="false">Mostly room temp</button>
+              </div>
+              <span class="help">Fridge-cold food and drinks need far less ice than room-temperature items, which have to be chilled down from scratch.</span>
+            </fieldset>
+
+            <fieldset class="field">
+              <legend>How often will you open it?</legend>
+              <div class="segmented" data-segmented="openingFrequency">
+                <button type="button" data-value="rare" aria-pressed="false">Rare</button>
+                <button type="button" data-value="moderate" aria-pressed="true">Moderate</button>
+                <button type="button" data-value="frequent" aria-pressed="false">Frequent</button>
+              </div>
+              <span class="help">Every time the lid opens, cold air escapes and warm air rushes in.</span>
+            </fieldset>
+
+            <fieldset class="field">
+              <legend>Shade</legend>
+              <div class="segmented" data-segmented="shade">
+                <button type="button" data-value="shaded" aria-pressed="false">Mostly shaded</button>
+                <button type="button" data-value="mixed" aria-pressed="true">Mixed</button>
+                <button type="button" data-value="sun" aria-pressed="false">Mostly sun</button>
+              </div>
+              <span class="help">Direct sun heats the cooler shell and speeds up melting.</span>
+            </fieldset>
+
+            <div class="field">
+              <label for="iceType">Ice type</label>
+              <select id="iceType" name="iceType">
+                <option value="cubed">Cubed</option>
+                <option value="block">Block</option>
+                <option value="combination" selected>Combination</option>
+                <option value="bottles">Frozen water bottles</option>
+              </select>
+              <span class="help">This changes the packing advice below, not the total pounds needed.</span>
+            </div>
+
+            <div class="field">
+              <label class="checkbox-row" for="secondCooler">
+                <input type="checkbox" id="secondCooler" name="secondCooler">
+                Using a separate cooler for drinks
+              </label>
+              <span class="help">If checked, we'll suggest a rough split instead of separate full calculations.</span>
+            </div>
+          </form>
+        </div>
+
+        <div class="results-panel">
+          <div class="card result-primary" data-result-primary>
+            <span class="eyebrow">Recommended ice</span>
+            <div class="result-value"><span data-primary-value data-raw-value="0">0</span> <span class="result-unit">lb of ice</span></div>
+            <p class="result-sub" data-result-sub>Calculating...</p>
+          </div>
+
+          <div class="result-grid">
+            <div class="card result-card">
+              <span class="label">Initial fill</span>
+              <span class="value" data-initial-fill>--</span>
+            </div>
+            <div class="card result-card">
+              <span class="label">Daily replenishment</span>
+              <span class="value" data-daily-replenish>--</span>
+            </div>
+            <div class="card result-card">
+              <span class="label" data-ice-mix-title>Suggested ice mix</span>
+              <span class="value is-text" data-ice-mix-value>--</span>
+            </div>
+          </div>
+
+          <div class="callout callout-info" data-electric-callout hidden>
+            <h4>Electric cooler selected</h4>
+            <p>Electric coolers use active refrigeration and typically need little to no ice. The pounds above already come out small — pack a few frozen items only as backup in case of a power interruption (a campsite outage or a drained vehicle battery).</p>
+          </div>
+
+          <div class="callout callout-info" data-second-cooler-note hidden>
+            <h4>Using two coolers?</h4>
+            <p>Rather than run separate full calculations, split your total ice roughly 60/40: about <strong data-food-split>--</strong> lb for the food cooler and <strong data-drinks-split>--</strong> lb for the drinks cooler, since the drinks cooler usually gets opened far more often.</p>
+          </div>
+
+          <div class="callout callout-warn">
+            <h4>Food safety reminder</h4>
+            <p>This calculator estimates ice quantity for cooling comfort — it does not guarantee safe food temperatures. Use an appliance thermometer to confirm perishable food stays cold, follow safe food-storage practice, and discard anything that may have spoiled.</p>
+          </div>
+
+          <div class="card diagram-card">
+            <h3>Initial ice fill level</h3>
+            <div class="gauge" data-gauge-track role="group" aria-label="Initial ice fill percentage">
+              <div class="gauge-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <div class="gauge-fill" data-gauge-fill></div>
+              </div>
+              <div class="gauge-labels"><span>Empty</span><span>Packed full</span></div>
+            </div>
+            <p class="help" style="margin-top: var(--space-3);" data-packing-advice>Calculating packing advice...</p>
+          </div>
+
+          <details class="why-vary">
+            <summary>Why this estimate may vary</summary>
+            <p>Real-world ice loss depends on more than these inputs: ambient humidity, how much the sun/shade balance shifts through the day, how well-sealed and latched the cooler lid is, how full the cooler is (a fuller cooler holds cold longer than a half-empty one, since there's less air to keep cold), and the quality of the ice itself (some store-bought bagged ice is already partly melted and refrozen).</p>
+          </details>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" data-reset-btn>Reset</button>
+            <button type="button" class="btn btn-primary" data-copy-btn>Copy result</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>How this estimate is calculated</h2>
+          <p>We start with a simple baseline: about 2 pounds of ice per gallon of cooler space per day, which is a common rule of thumb for a basic cooler in moderate heat with moderate lid-opening. From there, the estimate is scaled up or down by outdoor temperature, cooler quality, how cold your food and drinks were when you packed them, how often you'll open the lid, and how much sun the cooler sits in. The first day gets a bigger "initial fill" charge, since bringing room-temperature or partly chilled contents down to a safe, cold temperature takes more ice than simply maintaining cold on later days — a well-packed cooler holds onto that cold, so each additional day needs a smaller top-off.</p>
+        </div>
+        <div class="formula-box">
+          <p><code>dailyIce = (capacity ÷ 4) × 2.0 lb × tempFactor × coolerTypeFactor × startingTempFactor × openingFactor × shadeFactor × purposeFactor</code></p>
+          <p><code>total = (dailyIce × 1.3) + (dailyIce × 0.8) × (days − 1)</code>, rounded up to a whole pound.</p>
+        </div>
+        <p>If you're also figuring out fuel for the fire, our <a href="/calculators/campfire-wood.html">Campfire Wood Calculator</a> uses the same kind of trip-length-and-conditions approach to estimate bundles of firewood.</p>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <h2>Assumptions &amp; limitations</h2>
+        </div>
+        <ul class="assumption-list">
+          <li>The baseline assumes a closed, reasonably shaded cooler that isn't left open for long stretches.</li>
+          <li>Actual ice retention varies a lot by brand and construction — two coolers labeled the same size can perform very differently.</li>
+          <li>This tool estimates comfort and cooling, not certified food safety. It does not guarantee any specific internal temperature.</li>
+          <li>Ice type (cubed, block, combination, or frozen bottles) changes packing advice here but not the total pounds math.</li>
+          <li>Extreme weather swings, altitude, or direct exposure to hot pavement/asphalt aren't modeled and can increase melt beyond this estimate.</li>
+          <li>These are planning estimates only — see our <a href="/disclaimer.html">disclaimer</a> for the full picture on how to use Camp Math's numbers.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Practical recommendations</h2>
+        </div>
+        <ul class="assumption-list">
+          <li>Pre-chill your cooler (and its contents, when possible) for a few hours before packing — a warm cooler shell steals cold from your ice immediately.</li>
+          <li>Pack dense, already-cold items on the bottom near the ice; lighter, frequently-accessed items near the top.</li>
+          <li>Keep the lid closed as much as possible — consider a separate small cooler or bag for drinks you'll grab constantly, so the main food cooler stays shut.</li>
+          <li>If food stays sealed and off the cooler floor, leaving melted ice water in place can help keep things cold; drain it for drinks-only coolers or if it risks touching unsealed food.</li>
+          <li>Pack the cooler as full as you reasonably can — less air space means less warm air to cool down each time the lid opens.</li>
+          <li>If you're also sizing up cooking fuel for the trip, our <a href="/calculators/propane.html">Propane Calculator</a> can help you estimate cylinders needed alongside your ice.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <h2>Frequently asked questions</h2>
+        </div>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Is block ice better than cubed ice?</summary>
+            <p class="faq-answer">Block ice lasts longer because it has less surface area exposed to warm air, so it melts more slowly. Cubed ice cools faster at first and packs into gaps well, but melts quicker. Many campers use both: block ice on the bottom for longevity, cubed on top for a fast initial chill.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Do electric coolers need ice at all?</summary>
+            <p class="faq-answer">Not really. Electric coolers use active refrigeration (similar to a mini fridge) rather than relying on melting ice, so they typically need little to no ice. It's still smart to pack a few frozen items as a backup in case of a power interruption.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Should I pre-chill my cooler before packing it?</summary>
+            <p class="faq-answer">Yes. A warm cooler shell and warm air trapped inside will melt some of your ice just bringing the cooler itself down to temperature. Pre-chilling with a bag of ice for a few hours (then dumping it before the real pack) saves ice for the actual trip.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How often should I check my cooler's temperature?</summary>
+            <p class="faq-answer">For multi-day trips, check once or twice a day with an appliance thermometer, especially for perishable food. This calculator estimates ice quantity, but only a thermometer can confirm your food is actually staying at a safe temperature.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Does opening the cooler often really matter that much?</summary>
+            <p class="faq-answer">Yes — every time the lid opens, cold air spills out and warm air rushes in, and that effect compounds over a multi-day trip. Frequent openers can lose ice noticeably faster than someone who opens the cooler only at mealtimes.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Should I drain the melted ice water from my cooler?</summary>
+            <p class="faq-answer">It depends on what's inside. If food is sealed in waterproof containers or bags, leaving the cold water in place can actually help keep things cool. For drinks-only coolers, or if you're worried about unsealed food sitting in water, go ahead and drain periodically.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How long will ice last in a good cooler?</summary>
+            <p class="faq-answer">A well-packed, high-performance rotomolded cooler kept mostly shaded and closed can hold ice for several days to over a week. A basic cooler in direct sun with frequent lid-opening might only hold solid ice for a day or two — hence all the variables in this calculator.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Does the color of my cooler affect how long ice lasts?</summary>
+            <p class="faq-answer">Somewhat — lighter-colored coolers reflect more sunlight and absorb less heat than dark-colored ones sitting in direct sun. It's a smaller factor than shade, cooler quality, or how often you open the lid, but it can help at the margins.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Is dry ice worth using instead of regular ice?</summary>
+            <p class="faq-answer">Dry ice is much colder and lasts longer, which can be useful for very long trips or freezing food solid, but it requires ventilation (it releases CO2 gas), gloves to handle, and isn't ideal for keeping drinks at a drinkable temperature. Most car-camping trips do fine with regular ice.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How full should I pack my cooler for best cooling?</summary>
+            <p class="faq-answer">As full as reasonably possible. Empty air space heats up and has to be re-cooled every time the lid opens, while a fully packed cooler has less air to warm and holds its temperature more evenly.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What's a good ice-to-contents ratio?</summary>
+            <p class="faq-answer">A common starting point is roughly equal parts ice and contents by volume for a multi-day trip in warm weather, though this calculator's pounds figure already accounts for your specific temperature, cooler type, and usage pattern rather than using a flat ratio.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Related calculators</h2>
+        </div>
+        <div class="related-grid">
+          <a class="card calc-card" href="/calculators/campfire-wood.html">
+            <div class="icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c3 4-2 5 0 9 1-1 2-2 2-4 2 2 3 5 1 8a6 6 0 0 1-10-4c0-3 3-4 3-7 1 1 2 2 2 3 1-2 1-4 2-5Z"/></svg>
+            </div>
+            <h3>Campfire Wood</h3>
+            <p>Estimate how many bundles of firewood you'll need for your trip's nights and campfire style.</p>
+            <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </a>
+          <a class="card calc-card" href="/calculators/propane.html">
+            <div class="icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 8V5a3 3 0 0 1 6 0v3"/><rect x="6" y="8" width="12" height="13" rx="3"/></svg>
+            </div>
+            <h3>Propane</h3>
+            <p>Figure out how many propane cylinders you need for cooking and heating on your trip.</p>
+            <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </a>
+          <a class="card calc-card" href="/calculators/backpack-weight.html">
+            <div class="icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 8V6a4 4 0 0 1 8 0v2"/><rect x="5" y="8" width="14" height="13" rx="3"/></svg>
+            </div>
+            <h3>Backpack Weight</h3>
+            <p>Check whether your packed backpack weight is in a comfortable range for your body weight.</p>
+            <span class="card-cta">Calculate <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <section class="card rating-widget" data-rating="cooler-ice">
+        <h2 class="rating-title">How useful was this calculator?</h2>
+        <div class="stars" role="radiogroup" aria-label="Star rating">
+          <button type="button" class="star" data-value="1" aria-label="1 star">&#9733;</button>
+          <button type="button" class="star" data-value="2" aria-label="2 stars">&#9733;</button>
+          <button type="button" class="star" data-value="3" aria-label="3 stars">&#9733;</button>
+          <button type="button" class="star" data-value="4" aria-label="4 stars">&#9733;</button>
+          <button type="button" class="star" data-value="5" aria-label="5 stars">&#9733;</button>
+        </div>
+        <p class="rating-thanks" hidden>Thanks for your feedback!</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer contour-tile">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a href="/index.html" class="logo" aria-label="Camp Math home">
+          <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#eef4ec"/><path d="M20 22 L26 9 L39 31 Z" fill="#cfe0cd"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+          <span>Camp<span class="logo-accent">Math</span></span>
+        </a>
+        <p class="footer-tagline">Plan smarter. Pack lighter. Camp better. Free calculators for campsite planning, comfort, fuel, and hiking.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Calculators</h3>
+        <ul>
+          <li><a href="/calculators/tent-size.html">Tent Size</a></li>
+          <li><a href="/calculators/sleeping-bag.html">Sleeping Bag Temperature</a></li>
+          <li><a href="/calculators/campsite-size.html">Campsite Size</a></li>
+          <li><a href="/calculators/campfire-wood.html">Campfire Wood</a></li>
+          <li><a href="/calculators/cooler-ice.html">Cooler Ice</a></li>
+          <li><a href="/calculators/propane.html">Propane</a></li>
+          <li><a href="/calculators/hiking-time.html">Hiking Time</a></li>
+          <li><a href="/calculators/backpack-weight.html">Backpack Weight</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="/terms-of-use.html">Terms of Use</a></li>
+          <li><a href="/disclaimer.html">Disclaimer</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; <span data-current-year></span> Camp Math. Estimates for planning purposes only — not professional, medical, engineering, or safety advice. See our <a href="/disclaimer.html">disclaimer</a>.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/shared.js"></script>
+  <script src="/js/calculators.js"></script>
+  <script src="/js/calc-cooler-ice.js"></script>
+</body>
+</html>
