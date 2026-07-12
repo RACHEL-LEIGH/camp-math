@@ -148,7 +148,7 @@ default.
 
 ## Analytics
 
-Google Analytics (GA4, measurement ID `G-CWPM2C6R74`) is wired into every
+Google Analytics (GA4, measurement ID `G-JSXPWZ4VCS`) is wired into every
 page's `<head>` via the standard `gtag.js` snippet. The five-star rating
 widgets fire a `calculator_rating` event (with `calculator_name` and `rating`
 parameters) the moment a star is clicked; the whole site still works with
