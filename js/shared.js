@@ -9,6 +9,45 @@
 
   var CampingMath = window.CampingMath || {};
 
+  /* ---------- Dark mode toggle ----------
+   * The actual theme decision (stored preference, or system preference as a
+   * fallback) is made synchronously by a tiny inline script in <head> before
+   * first paint, so there's no flash of the wrong theme. This just wires the
+   * toggle button and keeps its label/pressed-state in sync with reality.
+   */
+  var THEME_STORAGE_KEY = "campingmath_theme";
+
+  function setStoredTheme(value) {
+    try {
+      window.localStorage.setItem(THEME_STORAGE_KEY, value);
+    } catch (err) {
+      /* localStorage unavailable — theme still applies for this page view */
+    }
+  }
+
+  function currentTheme() {
+    return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+  }
+
+  function applyTheme(theme, toggle) {
+    document.documentElement.setAttribute("data-theme", theme);
+    if (!toggle) return;
+    toggle.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+    toggle.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
+  }
+
+  function initTheme() {
+    var toggle = document.querySelector("[data-theme-toggle]");
+    applyTheme(currentTheme(), toggle);
+    if (!toggle) return;
+
+    toggle.addEventListener("click", function () {
+      var next = currentTheme() === "dark" ? "light" : "dark";
+      setStoredTheme(next);
+      applyTheme(next, toggle);
+    });
+  }
+
   /* ---------- Mobile navigation toggle ---------- */
   function initNav() {
     var toggle = document.querySelector("[data-nav-toggle]");
@@ -189,6 +228,7 @@
   CampingMath.launchConfetti = launchConfetti;
 
   document.addEventListener("DOMContentLoaded", function () {
+    initTheme();
     initNav();
     initFooterYear();
     initRatingWidgets();

@@ -16,6 +16,9 @@
 <meta name="twitter:title" content="CampingMath — Free Camping & Hiking Planning Calculators">
 <meta name="twitter:description" content="Plan smarter. Pack lighter. Camp better. Eight free calculators for campsite planning, comfort, fuel, and hiking.">
 <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<script>
+(function(){try{var t=localStorage.getItem("campingmath_theme");if(!t){t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";}document.documentElement.setAttribute("data-theme",t);}catch(e){}})();
+</script>
 <link rel="stylesheet" href="/css/style.css">
 <script type="application/ld+json">
 {
@@ -38,10 +41,15 @@
 <header class="site-header">
   <div class="container header-inner">
     <a href="/index.html" class="logo" aria-label="CampingMath home">
-      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#2c6339"/><path d="M20 22 L26 9 L39 31 Z" fill="#17351f"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path class="logo-mtn" d="M2 31 L14 12 L20 22 L26 9 L39 31 Z"/><path class="logo-mtn-shadow" d="M20 22 L26 9 L39 31 Z"/><circle class="logo-sun" cx="30" cy="7" r="3"/></svg>
       <span>Camping<span class="logo-accent">Math</span></span>
     </a>
-    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav">
+    <div class="header-actions">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"></path></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path></svg>
+      </button>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav">
       <span class="visually-hidden">Menu</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
@@ -52,6 +60,7 @@
         <li><a href="/about.html">About</a></li>
       </ul>
     </nav>
+    </div>
   </div>
 </header>
 
@@ -282,7 +291,7 @@
   <div class="container footer-inner">
     <div class="footer-brand">
       <a href="/index.html" class="logo" aria-label="CampingMath home">
-        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#eef4ec"/><path d="M20 22 L26 9 L39 31 Z" fill="#cfe0cd"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path class="logo-mtn" d="M2 31 L14 12 L20 22 L26 9 L39 31 Z"/><path class="logo-mtn-shadow" d="M20 22 L26 9 L39 31 Z"/><circle class="logo-sun" cx="30" cy="7" r="3"/></svg>
         <span>Camping<span class="logo-accent">Math</span></span>
       </a>
       <p class="footer-tagline">Plan smarter. Pack lighter. Camp better. Free calculators for campsite planning, comfort, fuel, and hiking.</p>
