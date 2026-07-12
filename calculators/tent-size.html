@@ -16,13 +16,26 @@
 <meta name="twitter:title" content="Tent Size Calculator — What Size Tent Do I Need?">
 <meta name="twitter:description" content="Find out what size tent you actually need. See real livable capacity, not just the manufacturer's tight person rating, based on sleepers, pets, and gear.">
 <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<script>
+(function(){try{var t=localStorage.getItem("campingmath_theme");if(!t){t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";}document.documentElement.setAttribute("data-theme",t);}catch(e){}})();
+</script>
 <link rel="stylesheet" href="/css/style.css">
 <style>
   /* Page-specific: top-down tent diagram, scoped to this page only */
-  .tent-size-diagram .tent-outline { fill: rgba(60, 125, 73, 0.08); stroke: var(--forest-600); stroke-width: 2; transition: width 400ms ease, height 400ms ease, x 400ms ease, y 400ms ease; }
-  .tent-size-diagram .tent-pad { fill: rgba(95, 149, 168, 0.35); stroke: var(--sky-dark); stroke-width: 1.2; }
+  .tent-size-diagram .tent-outline { fill: rgba(60, 125, 73, 0.08); stroke: var(--accent); stroke-width: 2; transition: width 400ms ease, height 400ms ease, x 400ms ease, y 400ms ease; }
+  .tent-size-diagram .tent-pad { fill: rgba(95, 149, 168, 0.45); stroke: var(--sky-dark); stroke-width: 1; }
+  .tent-size-diagram .tent-pad-child { fill: rgba(221, 118, 53, 0.35); stroke: var(--ember-dark); stroke-width: 1; }
+  .tent-size-diagram .tent-pet { fill: rgba(60, 125, 73, 0.45); stroke: var(--accent); stroke-width: 1; }
   .tent-size-diagram .tent-dim-label { font-size: 11px; fill: var(--text-muted); font-family: var(--font-body); }
-  .tent-size-note { font-size: 0.85rem; color: var(--text-muted); margin-top: var(--space-2); }
+  .tent-size-diagram .tent-overflow-label { font-size: 9.5px; fill: var(--text-muted); font-family: var(--font-body); font-style: italic; }
+  .tent-size-note, .tent-size-summary { font-size: 0.85rem; color: var(--text-muted); margin-top: var(--space-2); }
+  .tent-size-summary { font-weight: 700; color: var(--heading); }
+  .tent-size-legend { display: flex; gap: var(--space-4); flex-wrap: wrap; font-size: 0.78rem; color: var(--text-muted); margin-top: var(--space-3); }
+  .tent-size-legend span { display: inline-flex; align-items: center; gap: 0.35em; }
+  .tent-size-legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .tent-size-legend .swatch-adult { background: rgba(95, 149, 168, 0.6); border: 1px solid var(--sky-dark); }
+  .tent-size-legend .swatch-child { background: rgba(221, 118, 53, 0.5); border: 1px solid var(--ember-dark); }
+  .tent-size-legend .swatch-pet { background: rgba(60, 125, 73, 0.6); border-radius: 50%; border: 1px solid var(--accent); }
 </style>
 </head>
 <body>
@@ -31,10 +44,15 @@
 <header class="site-header">
   <div class="container header-inner">
     <a href="/index.html" class="logo" aria-label="CampingMath home">
-      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#2c6339"/><path d="M20 22 L26 9 L39 31 Z" fill="#17351f"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path class="logo-mtn" d="M2 31 L14 12 L20 22 L26 9 L39 31 Z"/><path class="logo-mtn-shadow" d="M20 22 L26 9 L39 31 Z"/><circle class="logo-sun" cx="30" cy="7" r="3"/></svg>
       <span>Camping<span class="logo-accent">Math</span></span>
     </a>
-    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav">
+    <div class="header-actions">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"></path></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path></svg>
+      </button>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav">
       <span class="visually-hidden">Menu</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
@@ -45,6 +63,7 @@
         <li><a href="/about.html">About</a></li>
       </ul>
     </nav>
+    </div>
   </div>
 </header>
 
@@ -161,15 +180,26 @@
             <p id="ts-crowd-text">A tent whose manufacturer rating just matches your group size would almost certainly feel cramped once pets and gear are inside. Consider sizing up.</p>
           </div>
 
+          <div class="callout callout-info" id="ts-multi-tent" hidden>
+            <h4>Consider multiple tents</h4>
+            <p id="ts-multi-tent-text">For groups this size, splitting into multiple tents is usually more practical than one giant tent.</p>
+          </div>
+
           <div class="card diagram-card">
-            <svg class="tent-size-diagram" viewBox="0 0 220 180" width="220" height="180" role="img" aria-labelledby="ts-diagram-title">
-              <title id="ts-diagram-title">Illustrative top-down diagram of the suggested tent footprint</title>
+            <svg class="tent-size-diagram" viewBox="0 0 220 180" width="220" height="180" role="img" aria-labelledby="ts-diagram-title" aria-describedby="ts-diagram-summary">
+              <title id="ts-diagram-title">Top-down diagram showing one rectangle per sleeper and one circle per pet, scaled to the suggested tent footprint</title>
               <rect class="tent-outline" id="ts-diagram-outline" x="40" y="20" width="140" height="140" rx="14"></rect>
-              <rect class="tent-pad" id="ts-diagram-pad1" x="55" y="35" width="45" height="65" rx="4"></rect>
-              <rect class="tent-pad" id="ts-diagram-pad2" x="120" y="35" width="45" height="65" rx="4"></rect>
+              <g id="ts-diagram-pads"></g>
+              <text class="tent-overflow-label" id="ts-diagram-overflow" x="110" y="34" text-anchor="middle"></text>
               <text class="tent-dim-label" id="ts-diagram-label" x="110" y="172" text-anchor="middle">0 x 0 ft</text>
             </svg>
-            <p class="tent-size-note">Illustrative top-down diagram, not to exact scale — real tents aren't perfect squares.</p>
+            <p class="tent-size-summary" id="ts-diagram-summary">Showing 2 sleepers in a 0 x 0 ft footprint.</p>
+            <div class="tent-size-legend">
+              <span><i class="swatch-adult"></i> Adult sleeper</span>
+              <span id="ts-diagram-legend-child"><i class="swatch-child"></i> Child sleeper</span>
+              <span id="ts-diagram-legend-pet"><i class="swatch-pet"></i> Pet</span>
+            </div>
+            <p class="tent-size-note">Illustrative top-down diagram, not to exact scale — real tents aren't perfect squares, and large groups are simplified to a representative grid.</p>
           </div>
 
           <details class="why-vary">
@@ -201,6 +231,7 @@
         <li>The 15 sq ft/person conversion is a rough industry rule of thumb, not a published standard — brands vary.</li>
         <li>Suggested dimensions assume a square-ish tent; actual tent shapes (dome, cabin, tunnel) will differ.</li>
         <li>This tool estimates floor space only — it does not account for peak height, headroom, or door placement.</li>
+        <li>All numbers describe the footprint of a single tent. For large groups, this calculator also suggests splitting into multiple smaller tents rather than assuming one oversized tent — see the note above the diagram if it appears.</li>
       </ul>
 
       <h2>Practical recommendations</h2>
@@ -262,6 +293,10 @@
           <summary>Is bigger always better when choosing a tent size?</summary>
           <p class="faq-answer">Not necessarily — bigger tents weigh more, cost more, take longer to heat up on cold nights, and can be harder to pitch on a small site. Use the "spacious" comfort setting only if you genuinely have the site space and are willing to carry or drive the extra bulk.</p>
         </details>
+        <details class="faq-item">
+          <summary>What if my group is too big for one tent?</summary>
+          <p class="faq-answer">Past a certain size, one giant tent stops being practical — very large tents are heavy, expensive, slow to pitch, and hard to find at all. Once your comfortable capacity climbs past about 8 people, this calculator switches to recommending several smaller tents (commonly sized around 6-person each) instead of a single oversized one. Every number on this page still describes a single tent's floor space; the multi-tent note tells you roughly how many of that size to plan for.</p>
+        </details>
       </div>
     </div>
   </section>
@@ -312,7 +347,7 @@
   <div class="container footer-inner">
     <div class="footer-brand">
       <a href="/index.html" class="logo" aria-label="CampingMath home">
-        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M2 31 L14 12 L20 22 L26 9 L39 31 Z" fill="#eef4ec"/><path d="M20 22 L26 9 L39 31 Z" fill="#cfe0cd"/><circle cx="30" cy="7" r="3" fill="#dd7635"/></svg>
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path class="logo-mtn" d="M2 31 L14 12 L20 22 L26 9 L39 31 Z"/><path class="logo-mtn-shadow" d="M20 22 L26 9 L39 31 Z"/><circle class="logo-sun" cx="30" cy="7" r="3"/></svg>
         <span>Camping<span class="logo-accent">Math</span></span>
       </a>
       <p class="footer-tagline">Plan smarter. Pack lighter. Camp better. Free calculators for campsite planning, comfort, fuel, and hiking.</p>

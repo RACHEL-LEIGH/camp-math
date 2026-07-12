@@ -32,6 +32,17 @@
   var COMFORT_MULTIPLIER = { cozy: 1.05, comfortable: 1.25, spacious: 1.50 };
   var SQFT_PER_PERSON = 15; // rough floor area manufacturers assume per sleeper in a tight dome-tent layout
 
+  /* Past this comfortable-capacity size, one tent stops being practical (weight, cost,
+     pitch time, availability), so we recommend splitting into several smaller tents
+     instead of one giant one. TARGET_TENT_SIZE is the size we split groups into. */
+  var MAX_SINGLE_TENT_PEOPLE = 8;
+  var TARGET_TENT_SIZE = 6;
+
+  /* Diagram: draw at most this many individual sleeper/pet icons before collapsing
+     the rest into a "+N more" note, so the floor plan stays legible for big groups. */
+  var MAX_DRAWN_SLEEPERS = 16;
+  var MAX_DRAWN_PETS = 6;
+
   function footprintSqFt(setup) {
     var dims = SLEEP_DIMENSIONS_IN[setup] || SLEEP_DIMENSIONS_IN.wide;
     return (dims.w * dims.l) / 144;
@@ -81,6 +92,21 @@
     var totalOccupants = adults + children;
     var crowdingWarning = totalOccupants > 0 && minCapacityPeople <= totalOccupants;
 
+    /* Multiple-tent recommendation: past MAX_SINGLE_TENT_PEOPLE, suggest splitting
+       into several TARGET_TENT_SIZE-ish tents rather than one oversized tent. This
+       is a planning simplification, not an assignment of specific people/pets to
+       specific tents. */
+    var suggestMultipleTents = comfortCapacityPeople > MAX_SINGLE_TENT_PEOPLE;
+    var recommendedTentCount = suggestMultipleTents
+      ? Math.max(2, Math.ceil(comfortCapacityPeople / TARGET_TENT_SIZE))
+      : 1;
+    var sizePerTent = recommendedTentCount > 1
+      ? Math.ceil(comfortCapacityPeople / recommendedTentCount)
+      : comfortCapacityPeople;
+    var peoplePerTent = recommendedTentCount > 1 && totalOccupants > 0
+      ? Math.ceil(totalOccupants / recommendedTentCount)
+      : totalOccupants;
+
     return {
       baseSleepArea: baseSleepArea,
       petArea: petArea,
@@ -92,12 +118,32 @@
       comfortCapacityPeople: comfortCapacityPeople,
       roundedSide: roundedSide,
       totalOccupants: totalOccupants,
-      crowdingWarning: crowdingWarning
+      crowdingWarning: crowdingWarning,
+      adults: adults,
+      children: children,
+      pets: pets,
+      suggestMultipleTents: suggestMultipleTents,
+      recommendedTentCount: recommendedTentCount,
+      sizePerTent: sizePerTent,
+      peoplePerTent: peoplePerTent
     };
   }
 
-  /* ---------- Diagram scaling ---------- */
-  function updateDiagram(roundedSide) {
+  /* ---------- Diagram scaling ----------
+   * Draws one small rectangle per adult/child sleeper (children in a second color)
+   * and one small circle per pet, arranged in a grid that fills the scaled tent
+   * outline — so the diagram actually reflects how many people/pets were entered,
+   * instead of always showing two fixed rectangles. Large groups are capped at
+   * MAX_DRAWN_SLEEPERS/MAX_DRAWN_PETS icons with a "+N more" note so the grid
+   * stays legible; the caption below the diagram always states the real totals.
+   */
+  var SVG_NS = "http://www.w3.org/2000/svg";
+
+  function clearGroup(g) {
+    while (g.firstChild) g.removeChild(g.firstChild);
+  }
+
+  function updateDiagram(roundedSide, adults, children, pets) {
     if (!els.diagramOutline) return;
     var safeSide = Number.isFinite(roundedSide) && roundedSide > 0 ? roundedSide : 6;
     // Map a plausible 4-20 ft side range onto a 60-190px box within the 220x180 viewBox.
@@ -112,27 +158,93 @@
     els.diagramOutline.setAttribute("width", String(boxSize));
     els.diagramOutline.setAttribute("height", String(boxSize));
 
-    var padW = boxSize * 0.32;
-    var padH = boxSize * 0.46;
-    var padY = y + boxSize * 0.14;
-    var gap = boxSize * 0.06;
-    var pad1X = x + boxSize * 0.5 - gap / 2 - padW;
-    var pad2X = x + boxSize * 0.5 + gap / 2;
-
-    if (els.diagramPad1) {
-      els.diagramPad1.setAttribute("x", String(pad1X));
-      els.diagramPad1.setAttribute("y", String(padY));
-      els.diagramPad1.setAttribute("width", String(padW));
-      els.diagramPad1.setAttribute("height", String(padH));
-    }
-    if (els.diagramPad2) {
-      els.diagramPad2.setAttribute("x", String(pad2X));
-      els.diagramPad2.setAttribute("y", String(padY));
-      els.diagramPad2.setAttribute("width", String(padW));
-      els.diagramPad2.setAttribute("height", String(padH));
-    }
     if (els.diagramLabel) {
       els.diagramLabel.textContent = calc.formatNumber(safeSide, safeSide % 1 === 0 ? 0 : 1) + " x " + calc.formatNumber(safeSide, safeSide % 1 === 0 ? 0 : 1) + " ft";
+    }
+
+    var totalSleepers = Math.max(0, Math.round(adults + children));
+    var totalPets = Math.max(0, Math.round(pets));
+    var drawnSleepers = Math.min(totalSleepers, MAX_DRAWN_SLEEPERS);
+    var drawnPets = Math.min(totalPets, MAX_DRAWN_PETS);
+    var drawnChildren = Math.min(children, drawnSleepers);
+    var drawnAdults = drawnSleepers - drawnChildren;
+
+    if (els.diagramPads) {
+      clearGroup(els.diagramPads);
+
+      var inset = boxSize * 0.09;
+      var gridX0 = x + inset;
+      var gridY0 = y + inset;
+      var gridW = boxSize - inset * 2;
+      var reserveForPets = drawnPets > 0 ? boxSize * 0.2 : 0;
+      var sleeperGridH = boxSize - inset * 2 - reserveForPets;
+
+      if (drawnSleepers > 0) {
+        var cols = calc.clamp(Math.ceil(Math.sqrt(drawnSleepers * (gridW / sleeperGridH))), 1, 8);
+        var rows = Math.ceil(drawnSleepers / cols);
+        var cellW = gridW / cols;
+        var cellH = sleeperGridH / rows;
+        var padW = cellW * 0.62;
+        var padH = cellH * 0.78;
+
+        for (var i = 0; i < drawnSleepers; i++) {
+          var col = i % cols;
+          var row = Math.floor(i / cols);
+          var cx = gridX0 + col * cellW + cellW / 2;
+          var cy = gridY0 + row * cellH + cellH / 2;
+          var rect = document.createElementNS(SVG_NS, "rect");
+          // Draw children last, so with few sleepers the adult/child mix stays visually grouped.
+          rect.setAttribute("class", i >= drawnAdults ? "tent-pad-child" : "tent-pad");
+          rect.setAttribute("x", String(cx - padW / 2));
+          rect.setAttribute("y", String(cy - padH / 2));
+          rect.setAttribute("width", String(Math.max(2, padW)));
+          rect.setAttribute("height", String(Math.max(2, padH)));
+          rect.setAttribute("rx", String(Math.min(4, padW * 0.15)));
+          els.diagramPads.appendChild(rect);
+        }
+      }
+
+      if (drawnPets > 0) {
+        var petRowY = gridY0 + sleeperGridH + boxSize * 0.06;
+        var petCellW = gridW / drawnPets;
+        var petR = Math.min(petCellW * 0.32, reserveForPets * 0.4);
+        for (var p = 0; p < drawnPets; p++) {
+          var pcx = gridX0 + p * petCellW + petCellW / 2;
+          var pcy = petRowY + reserveForPets * 0.4;
+          var circle = document.createElementNS(SVG_NS, "circle");
+          circle.setAttribute("class", "tent-pet");
+          circle.setAttribute("cx", String(pcx));
+          circle.setAttribute("cy", String(pcy));
+          circle.setAttribute("r", String(Math.max(2, petR)));
+          els.diagramPads.appendChild(circle);
+        }
+      }
+    }
+
+    if (els.diagramOverflow) {
+      var overflowSleepers = totalSleepers - drawnSleepers;
+      var overflowPets = totalPets - drawnPets;
+      var parts = [];
+      if (overflowSleepers > 0) parts.push("+" + overflowSleepers + " more sleeper" + (overflowSleepers === 1 ? "" : "s"));
+      if (overflowPets > 0) parts.push("+" + overflowPets + " more pet" + (overflowPets === 1 ? "" : "s"));
+      els.diagramOverflow.textContent = parts.join(", ");
+    }
+
+    if (els.diagramSummary) {
+      var sleeperWord = totalSleepers === 1 ? "sleeper" : "sleepers";
+      var summary = "Showing " + totalSleepers + " " + sleeperWord;
+      if (totalPets > 0) {
+        summary += " and " + totalPets + " pet" + (totalPets === 1 ? "" : "s");
+      }
+      summary += " in a " + calc.formatNumber(safeSide, safeSide % 1 === 0 ? 0 : 1) + " x " + calc.formatNumber(safeSide, safeSide % 1 === 0 ? 0 : 1) + " ft footprint.";
+      els.diagramSummary.textContent = summary;
+    }
+
+    if (els.diagramLegendPet) {
+      els.diagramLegendPet.style.display = totalPets > 0 ? "" : "none";
+    }
+    if (els.diagramLegendChild) {
+      els.diagramLegendChild.style.display = children > 0 ? "" : "none";
     }
   }
 
@@ -176,12 +288,22 @@
       els.crowdWarning.hidden = true;
     }
 
-    updateDiagram(roundedSideSafe);
+    if (result.suggestMultipleTents) {
+      els.multiTent.hidden = false;
+      els.multiTentText.textContent = "A single " + comfortCapacitySafe + "-person tent is impractical to buy, carry, and pitch. Plan for about " + result.recommendedTentCount + " tents sized around " + result.sizePerTent + "-person capacity each (roughly " + result.peoplePerTent + " people per tent) instead of one oversized tent.";
+    } else {
+      els.multiTent.hidden = true;
+    }
+
+    updateDiagram(roundedSideSafe, input.adults, input.children, input.pets);
 
     els.lastComfortCapacity = comfortCapacitySafe;
     els.lastFloorArea = comfortableAreaSafe;
     els.lastMinCapacity = minCapacitySafe;
     els.lastDimensions = roundedSideSafe;
+    els.lastSuggestMultipleTents = result.suggestMultipleTents;
+    els.lastRecommendedTentCount = result.recommendedTentCount;
+    els.lastSizePerTent = result.sizePerTent;
     void minimumAreaSafe;
   }
 
@@ -221,6 +343,9 @@
       "Minimum capacity: " + els.lastMinCapacity + "-person\n" +
       "Floor area needed: " + calc.formatNumber(els.lastFloorArea, 1) + " sq ft\n" +
       "Suggested dimensions: " + calc.formatNumber(els.lastDimensions, els.lastDimensions % 1 === 0 ? 0 : 1) + " x " + calc.formatNumber(els.lastDimensions, els.lastDimensions % 1 === 0 ? 0 : 1) + " ft";
+    if (els.lastSuggestMultipleTents) {
+      text += "\nConsider " + els.lastRecommendedTentCount + " tents at about " + els.lastSizePerTent + "-person capacity each instead of one large tent.";
+    }
     calc.copyResult(text);
   }
 
@@ -240,10 +365,15 @@
     els.dimensions = document.getElementById("ts-dimensions");
     els.crowdWarning = document.getElementById("ts-crowd-warning");
     els.crowdText = document.getElementById("ts-crowd-text");
+    els.multiTent = document.getElementById("ts-multi-tent");
+    els.multiTentText = document.getElementById("ts-multi-tent-text");
     els.diagramOutline = document.getElementById("ts-diagram-outline");
-    els.diagramPad1 = document.getElementById("ts-diagram-pad1");
-    els.diagramPad2 = document.getElementById("ts-diagram-pad2");
+    els.diagramPads = document.getElementById("ts-diagram-pads");
+    els.diagramOverflow = document.getElementById("ts-diagram-overflow");
     els.diagramLabel = document.getElementById("ts-diagram-label");
+    els.diagramSummary = document.getElementById("ts-diagram-summary");
+    els.diagramLegendPet = document.getElementById("ts-diagram-legend-pet");
+    els.diagramLegendChild = document.getElementById("ts-diagram-legend-child");
     els.resetBtn = document.getElementById("ts-reset");
     els.copyBtn = document.getElementById("ts-copy");
 
