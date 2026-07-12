@@ -146,12 +146,18 @@ default.
 - Loaded the site from a plain static file server with no network requests
   required for any calculator to function.
 
+## Analytics
+
+Google Analytics (GA4, measurement ID `G-CWPM2C6R74`) is wired into every
+page's `<head>` via the standard `gtag.js` snippet. The five-star rating
+widgets fire a `calculator_rating` event (with `calculator_name` and `rating`
+parameters) the moment a star is clicked; the whole site still works with
+analytics blocked or absent, since every `gtag(...)` call is guarded by a
+`typeof window.gtag === "function"` check.
+
 ## Before deploying
 
 - Replace `images/og-image.png` (a generated placeholder) with a designed
   social-share image.
 - Register `campingmath.com` (or update canonical/OG URLs if the domain differs)
   and connect the repo to Netlify.
-- If analytics is desired, add Google's `gtag.js` snippet to each page's
-  `<head>` — the rating widgets already fire a `calculator_rating` event when
-  `gtag` is present, and degrade silently when it isn't.
