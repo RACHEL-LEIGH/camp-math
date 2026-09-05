@@ -1,3 +1,7 @@
 [build]
   publish = "."
   # Plain static HTML/CSS/JS site — no build step, nothing to compile.
+
+[build.processing.html]
+  # Normalize .html requests and links to one trailing-slash URL form.
+  pretty_urls = true
